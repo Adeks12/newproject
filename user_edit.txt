@@ -1,0 +1,1 @@
+UPDATE userdata SET registration_completed='1',profile_completed_at='2025-06-13 13:19:12' WHERE  username='sam@mail.com' 

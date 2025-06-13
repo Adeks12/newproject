@@ -574,38 +574,58 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                 }
                 ?>
 
-                <?php foreach ($menu_list as $value): ?>
-                <?php $icon = get_icon($value['menu_name'], $icon_map); ?>
-                <?php if (!$value['has_sub_menu']): ?>
-                    <li>
-                        <a href="javascript:getpage('<?php echo $value['menu_url'] ?>','page')" class="waves-effect">
-                            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
-                            <span><?php echo ucfirst($value['menu_name']) ?></span>
-                        </a>
-                    </li>
-                <?php else: ?>
-                    <li>
-                        <a href="javascript:void(0);" class="has-arrow waves-effect">
-                            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
-                            <span><?php echo ucfirst($value['menu_name']) ?></span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="false">
-                            <?php foreach ($value['sub_menu'] as $sub): ?>
-                                <?php $sub_icon = get_icon($sub['menu_name'], $icon_map); ?>
-                                <li>
-                                    <a href="javascript:getpage('<?php echo $sub['menu_url'] ?>','page')">
-                                        <i class="mdi <?php echo htmlspecialchars($sub_icon); ?>"></i>
-                                        <?php echo ucfirst($sub['menu_name']) ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                <?php endif; ?>
+<ul class="metismenu list-unstyled" id="side-menu">
+    <li class="menu-title">Menu</li>
+    <?php
+    $current_page = basename($_SERVER['PHP_SELF']);
+    foreach ($menu_list as $value):
+        $menu_name = $value['menu_name'] ?? '';
+        $icon = get_icon($menu_name, $icon_map);
+        $menu_url = $value['menu_url'] ?? '#';
+        $is_active = ($current_page == $menu_url) ? 'active' : '';
+    ?>
+    <?php if (empty($value['has_sub_menu'])): ?>
+    <li class="<?php echo $is_active; ?>">
+        <a href="javascript:getpage('<?php echo $menu_url; ?>','page')" class="waves-effect">
+            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
+            <span><?php echo ucfirst($menu_name); ?></span>
+        </a>
+    </li>
+    <?php else: ?>
+    <?php
+            // Check if any sub-menu is active
+            $sub_active = '';
+            foreach ($value['sub_menu'] as $sub) {
+                if ($current_page == ($sub['menu_url'] ?? '')) {
+                    $sub_active = 'active';
+                    break;
+                }
+            }
+            ?>
+    <li class="<?php echo $sub_active; ?>">
+        <a href="javascript:void(0);" class="has-arrow waves-effect">
+            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
+            <span><?php echo ucfirst($menu_name); ?></span>
+        </a>
+        <ul class="sub-menu" aria-expanded="false">
+            <?php foreach ($value['sub_menu'] as $sub): 
+                        $sub_menu_name = $sub['name'] ?? '';
+                        $sub_icon = get_icon($sub_menu_name, $icon_map);
+                        $sub_url = $sub['menu_url'] ?? '#';
+                        $is_sub_active = ($current_page == $sub_url) ? 'active' : '';
+                    ?>
+            <li class="<?php echo $is_sub_active; ?>">
+                <a href="javascript:getpage('<?php echo $sub_url; ?>','page')">
+                    <i class="mdi <?php echo htmlspecialchars($sub_icon); ?>"></i>
+                    <?php echo ucfirst($sub_menu_name); ?>
+                </a>
+            </li>
             <?php endforeach; ?>
-
-               
-            </ul>
+        </ul>
+    </li>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</ul>
         </div>
         <!-- Sidebar -->
     </div>
@@ -638,281 +658,182 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                     <?php if ($registration_complete != 1) {
                 include('complete_onboarding.php');
             } else { ?>
+                              
             <div id="page">
-                    <div class="row">
-                        <div class="col-xl-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-start">
-                                        <div class="avatar-sm font-size-20 me-3">
-                                            <span class="avatar-title bg-soft-primary text-primary rounded">
-                                                <i class="mdi mdi-tag-plus-outline"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-size-16 mt-2">New Orders</div>
-                                        </div>
+                <div class="row">
+                    <div class="col-xl-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <div class="avatar-sm font-size-20 me-3">
+                                        <span class="avatar-title bg-soft-primary text-primary rounded">
+                                            <i class="mdi mdi-office-building"></i>
+                                        </span>
                                     </div>
-                                    <h4 class="mt-4">1,368</h4>
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <p class="mb-0"><span class="text-success me-2"> 0.28% <i
-                                                        class="mdi mdi-arrow-up"></i> </span></p>
-                                        </div>
-                                        <div class="col-5 align-self-center">
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 62%"
-                                                    aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+                                    <div class="flex-1">
+                                        <div class="font-size-16 mt-2">Active Departments</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-start">
-                                        <div class="avatar-sm font-size-20 me-3">
-                                            <span class="avatar-title bg-soft-primary text-primary rounded">
-                                                <i class="mdi mdi-account-multiple-outline"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-size-16 mt-2">New Users</div>
-
-                                        </div>
+                                <h4 class="mt-4"><?php echo $active_dept_count; ?></h4>
+                                <div class="row">
+                                    <div class="col-7">
+                                        <p class="mb-0"><span class="text-success me-2">
+                                                <?php echo $active_dept_count > 0 ? '100%' : '0%'; ?>
+                                                <i class="mdi mdi-arrow-up"></i> </span></p>
                                     </div>
-                                    <h4 class="mt-4">2,456</h4>
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <p class="mb-0"><span class="text-success me-2"> 0.16% <i
-                                                        class="mdi mdi-arrow-up"></i> </span></p>
-                                        </div>
-                                        <div class="col-5 align-self-center">
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 62%"
-                                                    aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
+                                    <div class="col-5 align-self-center">
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
+                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="col-xl-9">
-                              <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-5">Sales Analytics</h4>
-
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-6">
-                                            <div id="donut-chart" class="apex-charts"></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <div class="py-3">
-                                                            <p class="mb-1 text-truncate"><i
-                                                                    class="mdi mdi-circle text-primary me-1"></i> Online
-                                                            </p>
-                                                            <h5>$ 2,652</h5>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div class="py-3">
-                                                            <p class="mb-1 text-truncate"><i
-                                                                    class="mdi mdi-circle text-success me-1"></i>
-                                                                Offline</p>
-                                                            <h5>$ 2,284</h5>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div class="py-3">
-                                                            <p class="mb-1 text-truncate"><i
-                                                                    class="mdi mdi-circle text-warning me-1"></i>
-                                                                Marketing</p>
-                                                            <h5>$ 1,753</h5>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <div class="avatar-sm font-size-20 me-3">
+                                        <span class="avatar-title bg-soft-primary text-primary rounded">
+                                            <i class="mdi mdi-account-multiple-outline"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-size-16 mt-2">Employed Staff</div>
                                     </div>
                                 </div>
-                            </div>
-                    </div>
-                    <!-- end row -->
-
-                   
-                    <!-- end row -->
-
-                    <div class="row">
-                        <div class="col-xl-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Inbox</h4>
-
-                                    <ul class="inbox-wid list-unstyled">
-                                        <li class="inbox-list-item">
-                                            <a href="#">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="me-3 align-self-center">
-                                                        <img src="assets/images/users/avatar-3.jpg" alt=""
-                                                            class="avatar-sm rounded-circle">
-                                                    </div>
-                                                    <div class="flex-1 overflow-hidden">
-                                                        <h5 class="font-size-16 mb-1">Paul</h5>
-                                                        <p class="text-truncate mb-0">Hey! there I'm available</p>
-                                                    </div>
-                                                    <div class="font-size-12 ms-auto">
-                                                        05 min
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="inbox-list-item">
-                                            <a href="#">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="me-3 align-self-center">
-                                                        <img src="assets/images/users/avatar-4.jpg" alt=""
-                                                            class="avatar-sm rounded-circle">
-                                                    </div>
-                                                    <div class="flex-1 overflow-hidden">
-                                                        <h5 class="font-size-16 mb-1">Mary</h5>
-                                                        <p class="text-truncate mb-0">This theme is awesome!</p>
-                                                    </div>
-                                                    <div class="font-size-12 ms-auto">
-                                                        12 min
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="inbox-list-item">
-                                            <a href="#">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="me-3 align-self-center">
-                                                        <img src="assets/images/users/avatar-5.jpg" alt=""
-                                                            class="avatar-sm rounded-circle">
-                                                    </div>
-                                                    <div class="flex-1 overflow-hidden">
-                                                        <h5 class="font-size-16 mb-1">Cynthia</h5>
-                                                        <p class="text-truncate mb-0">Nice to meet you</p>
-                                                    </div>
-                                                    <div class="font-size-12 ms-auto">
-                                                        18 min
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="inbox-list-item">
-                                            <a href="#">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="me-3 align-self-center">
-                                                        <img src="assets/images/users/avatar-6.jpg" alt=""
-                                                            class="avatar-sm rounded-circle">
-                                                    </div>
-                                                    <div class="flex-1 overflow-hidden">
-                                                        <h5 class="font-size-16 mb-1">Darren</h5>
-                                                        <p class="text-truncate mb-0">I've finished it! See you so</p>
-                                                    </div>
-                                                    <div class="font-size-12 ms-auto">
-                                                        2hr ago
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                    <div class="text-center">
-                                        <a href="#" class="btn btn-primary btn-sm">Load more</a>
+                                <h4 class="mt-4"><?php echo $staff_count; ?></h4>
+                                <div class="row">
+                                    <div class="col-7">
+                                        <p class="mb-0"><span class="text-success me-2">
+                                                <?php echo $staff_count > 0 ? '100%' : '0%'; ?>
+                                                <i class="mdi mdi-arrow-up"></i> </span></p>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-8">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Latest Transactions</h4>
-
-                                    <div class="table-responsive">
-                                        <table class="table table-centered">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Date</th>
-                                                    <th scope="col">Id no.</th>
-                                                    <th scope="col">Billing Name</th>
-                                                    <th scope="col">Amount</th>
-                                                    <th scope="col" colspan="2">Payment Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>15/01/2020</td>
-                                                    <td>
-                                                        <a href="#" class="text-body fw-medium">#SK1235</a>
-                                                    </td>
-                                                    <td>Werner Berlin</td>
-                                                    <td>$ 125</td>
-                                                    <td><span class="badge badge-soft-success font-size-12">Paid</span>
-                                                    </td>
-                                                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>16/01/2020</td>
-                                                    <td>
-                                                        <a href="#" class="text-body fw-medium">#SK1236</a>
-                                                    </td>
-                                                    <td>Robert Jordan</td>
-                                                    <td>$ 118</td>
-                                                    <td><span class="badge bg-danger-subtle text-danger font-size-12">Chargeback</span>
-                                                    </td>
-                                                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>17/01/2020</td>
-                                                    <td>
-                                                        <a href="#" class="text-body fw-medium">#SK1237</a>
-                                                    </td>
-                                                    <td>Daniel Finch</td>
-                                                    <td>$ 115</td>
-                                                    <td><span class="badge badge-soft-success font-size-12">Paid</span>
-                                                    </td>
-                                                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>18/01/2020</td>
-                                                    <td>
-                                                        <a href="#" class="text-body fw-medium">#SK1238</a>
-                                                    </td>
-                                                    <td>James Hawkins</td>
-                                                    <td>$ 121</td>
-                                                    <td><span class="badge bg-warning-subtle text-warning  font-size-12">Refund</span>
-                                                    </td>
-                                                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="mt-3">
-                                        <ul class="pagination pagination-rounded justify-content-center mb-0">
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">Previous</a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a>
-                                            </li>
-                                        </ul>
+                                    <div class="col-5 align-self-center">
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end row -->
+
+                    <div class="col-xl-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-5">Statistics Overview</h4>
+                                <div class="row align-items-center">
+                                    <div class="col-sm-6">
+                                        <div id="donut-chart" class="apex-charts"></div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="py-3">
+                                                        <p class="mb-1 text-truncate"><i
+                                                                class="mdi mdi-circle text-primary me-1"></i> Active
+                                                            Departments</p>
+                                                        <h5><?php echo $active_dept_count; ?></h5>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="py-3">
+                                                        <p class="mb-1 text-truncate"><i
+                                                                class="mdi mdi-circle text-success me-1"></i> Employed
+                                                            Staff</p>
+                                                        <h5><?php echo $staff_count; ?></h5>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="py-3">
+                                                        <p class="mb-1 text-truncate"><i
+                                                                class="mdi mdi-circle text-warning me-1"></i> New
+                                                            Inventory</p>
+                                                        <h5><?php echo $total_new_inventory; ?></h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Card and Mini Inventory Table -->
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Staff Chat</h4>
+                                <ul class="inbox-wid list-unstyled">
+                                    <?php
+                        $staffs = $dbobject->db_query("SELECT staff_first_name, staff_last_name FROM staff WHERE merchant_id='$merchant_id' AND staff_status='1' LIMIT 4", true);
+                        foreach ($staffs as $staff) {
+                            echo '<li class="inbox-list-item">
+                                <a href="#">
+                                    <div class="d-flex align-items-start">
+                                        <div class="me-3 align-self-center">
+                                            <img src="assets/images/users/avatar-3.jpg" alt="" class="avatar-sm rounded-circle">
+                                        </div>
+                                        <div class="flex-1 overflow-hidden">
+                                            <h5 class="font-size-16 mb-1">'.htmlspecialchars($staff['staff_first_name']).'</h5>
+                                            <p class="text-truncate mb-0">Staff member</p>
+                                        </div>
+                                        <div class="font-size-12 ms-auto"></div>
+                                    </div>
+                                </a>
+                            </li>';
+                        }
+                        ?>
+                                </ul>
+                                <div class="text-center">
+                                    <a href="#" class="btn btn-primary btn-sm">Load more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Mini Inventory Table</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-centered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item Code</th>
+                                                <th>Condition</th>
+                                                <th>Category</th>
+                                                <th>Status</th>
+                                                <th>Created</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                $inv = $dbobject->db_query("SELECT item_code, item_cond, item_cat_id, allocation_status, created_at FROM inventory WHERE merchant_id='$merchant_id' AND delete_status != '1' ORDER BY created_at DESC LIMIT 5", true);
+                                foreach ($inv as $item) {
+                                    echo '<tr>
+                                        <td>' . htmlspecialchars($item['item_code']) . '</td>
+                                        <td>' . htmlspecialchars($item['item_cond']) . '</td>
+                                        <td>' . htmlspecialchars($item['item_cat_id']) . '</td>
+                                        <td>' . htmlspecialchars($item['allocation_status']) . '</td>
+                                        <td>' . date('Y-m-d', strtotime($item['created_at'])) . '</td>
+                                    </tr>';
+                                }
+                                ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 </div>
                 <!-- End Page-content -->
 
@@ -1003,10 +924,12 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <!-- JAVASCRIPT -->
     <script src="assets/libs/jquery/jquery.min.js"></script>
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery.blockUI.js"></script>
     <script src="assets/libs/metismenu/metisMenu.min.js"></script>
     <script src="assets/libs/simplebar/simplebar.min.js"></script>
     <script src="assets/libs/node-waves/waves.min.js"></script>
     <script src="assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <script src="js/sweet_alerts.js"></script>
 
         
     <!-- Required datatable js -->
@@ -1025,8 +948,7 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
-    <!-- Datatable init js -->
-    <script src="assets/js/pages/datatables.init.js"></script>
+   
 
 
     <!-- apexcharts -->
@@ -1036,8 +958,6 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <!-- jquery.vectormap map -->
     <script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
     <script src="assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js"></script>
-
-    <script src="assets/js/pages/dashboard.init.js"></script>
 
     <script src="assets/js/app.js"></script>
 
@@ -1101,6 +1021,35 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
         $('#defaultModalPrimary').modal('show');
     });
 }
+        function get_icon($name, $icon_map) {
+        $key = is_string($name) ? strtolower(trim($name)) : '';
+        return $icon_map[$key] ?? $icon_map['default'];
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        if (typeof ApexCharts !== "undefined") {
+        var options = {
+        chart: {
+        type: 'donut',
+        height: 240
+        },
+        // Remove or comment out the labels line
+        labels: ['Active Departments', 'Employed Staff', 'New Inventory'],
+        series: [
+        <?php echo $active_dept_count; ?>,
+        <?php echo $staff_count; ?>,
+        <?php echo $total_new_inventory; ?>
+        ],
+        colors: ['#007bff', '#34c38f',  '#ffc107'], // green, blue, yellow
+        legend: { show: false },
+        dataLabels: { enabled: true },
+        tooltip: { enabled: true }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#donut-chart"), options);
+        chart.render();
+        }
+        });
     </script>
 
     <div class="modal fade" id="defaultModalPrimary" tabindex="-1" role="dialog" aria-labelledby="defaultModalPrimaryLabel" aria-hidden="true">
@@ -1117,3 +1066,4 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     </body>
 
 </html>
+

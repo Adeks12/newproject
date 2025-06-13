@@ -185,6 +185,10 @@ table.dataTable thead .sorting_desc:after {
         }
     }
 
+    function allocateInventory(id) {
+        loadModal('setup/inventory_setup.php?op=allocate&item_id=' + id, 'modal_div');
+    }
+
     function loadModal(url, target) {
         $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
         $.get(url, function(data) {

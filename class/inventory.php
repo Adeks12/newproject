@@ -44,9 +44,13 @@ class inventory extends dbobject
             }),
             array('db' => 'i.item_id', 'dt' => 10, 'formatter' => function($d, $row) {
                 return '<div class="d-flex gap-1">
-                            <button class="btn btn-sm btn-primary" onclick="editInventory('.$d.')">Edit</button>
-                            <button class="btn btn-sm btn-success" onclick="allocateInventory('.$d.')">Allocate</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteInventory('.$d.')">Delete</button>
+                             <button class="btn btn-sm btn-outline-secondary" onclick="editInventory('.$d.')"><i
+                                     class="fas fa-pencil-alt"></i></button>
+                                     <button class="btn btn-sm btn-outline-secondary" onclick="allocateInventory('.$d.')"><i 
+                                     class="fas fa-handshake"></i></button>
+                             <button class="btn btn-sm btn-outline-danger" onclick="deleteInventory('.$d.')"><i
+                                     class="fas fa-trash-alt"></i></button>
+                            
                         </div>';
             })
         );

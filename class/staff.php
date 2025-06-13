@@ -30,8 +30,11 @@ class Staff extends dbobject
                 'dt' => 9,
                 'formatter' => function( $d, $row ) {
                     return '<div class="d-flex gap-1">
-                                <button class="btn btn-sm btn-primary" onclick="editstaff('.$d.')">Edit</button>
-                                <button class="btn btn-sm btn-danger" onclick="deletestaff('.$d.')">Delete</button>
+                               <button class="btn btn-sm btn-outline-secondary" onclick="editstaff('.$d.')"><i
+                      class="fas fa-pencil-alt"></i></button>
+            
+              <button class="btn btn-sm btn-outline-danger" onclick="deletestaff('.$d.')"><i
+                      class="fas fa-trash-alt"></i></button>
                             </div>';
                 }
             )
