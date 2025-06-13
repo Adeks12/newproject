@@ -1,0 +1,1 @@
+SELECT depmt_id,depmt_name,depmt_code,depmt_head,depmt_status,created_at,depmt_id FROM department WHERE  1 = 1  AND merchant_id = 'PRO-773289' order by depmt_id asc  LIMIT 0, 10

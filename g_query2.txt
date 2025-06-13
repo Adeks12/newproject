@@ -1,0 +1,1 @@
+SELECT COUNT(depmt_id) AS counter FROM department WHERE  1 = 1  AND merchant_id = 'PRO-773289' order by depmt_id asc

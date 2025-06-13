@@ -67,6 +67,16 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
         <!-- App favicon -->
         <link rel="shortcut icon" href="assets/images/favicon.ico">
 
+        
+    <!-- DataTables -->
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" /> 
+
+    <!-- Responsive datatable examples -->
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+
         <!-- jquery.vectormap css -->
         <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet"
             type="text/css" />
@@ -251,21 +261,15 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-2.jpg"
                                         alt="Header Avatar">
-                                    <span class="d-none d-xl-inline-block ms-1">Patrick</span>
+                                    <span class="d-none d-xl-inline-block ms-1"><?php echo $merchant_first_name ?></span>
                                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <!-- item-->
-                                    <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i>
+                                    <a class="dropdown-item" href="javascript:getpage('profile.php','page')"><i class="bx bx-user font-size-16 align-middle me-1"></i>
                                         Profile</a>
-                                    <a class="dropdown-item" href="#"><i class="bx bx-wallet font-size-16 align-middle me-1"></i> My
-                                        Wallet</a>
-                                    <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end">11</span><i
-                                            class="bx bx-wrench font-size-16 align-middle me-1"></i> Settings</a>
-                                    <a class="dropdown-item" href="#"><i class="bx bx-lock-open font-size-16 align-middle me-1"></i>
-                                        Lock screen</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="#"><i
+                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="logout.php"  onclick="event.preventDefault();confirmLogout();"><i
                                             class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> Logout</a>
                                 </div>
                             </div>
@@ -571,34 +575,34 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                 ?>
 
                 <?php foreach ($menu_list as $value): ?>
-    <?php $icon = get_icon($value['menu_name'], $icon_map); ?>
-    <?php if (!$value['has_sub_menu']): ?>
-        <li>
-            <a href="javascript:getpage('<?php echo $value['menu_url'] ?>','page')" class="waves-effect">
-                <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
-                <span><?php echo ucfirst($value['menu_name']) ?></span>
-            </a>
-        </li>
-    <?php else: ?>
-        <li>
-            <a href="javascript:void(0);" class="has-arrow waves-effect">
-                <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
-                <span><?php echo ucfirst($value['menu_name']) ?></span>
-            </a>
-            <ul class="sub-menu" aria-expanded="false">
-                <?php foreach ($value['sub_menu'] as $sub): ?>
-                    <?php $sub_icon = get_icon($sub['menu_name'], $icon_map); ?>
+                <?php $icon = get_icon($value['menu_name'], $icon_map); ?>
+                <?php if (!$value['has_sub_menu']): ?>
                     <li>
-                        <a href="javascript:getpage('<?php echo $sub['menu_url'] ?>','page')">
-                            <i class="mdi <?php echo htmlspecialchars($sub_icon); ?>"></i>
-                            <?php echo ucfirst($sub['menu_name']) ?>
+                        <a href="javascript:getpage('<?php echo $value['menu_url'] ?>','page')" class="waves-effect">
+                            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
+                            <span><?php echo ucfirst($value['menu_name']) ?></span>
                         </a>
                     </li>
-                <?php endforeach; ?>
-            </ul>
-        </li>
-    <?php endif; ?>
-<?php endforeach; ?>
+                <?php else: ?>
+                    <li>
+                        <a href="javascript:void(0);" class="has-arrow waves-effect">
+                            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
+                            <span><?php echo ucfirst($value['menu_name']) ?></span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <?php foreach ($value['sub_menu'] as $sub): ?>
+                                <?php $sub_icon = get_icon($sub['menu_name'], $icon_map); ?>
+                                <li>
+                                    <a href="javascript:getpage('<?php echo $sub['menu_url'] ?>','page')">
+                                        <i class="mdi <?php echo htmlspecialchars($sub_icon); ?>"></i>
+                                        <?php echo ucfirst($sub['menu_name']) ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
 
                
             </ul>
@@ -694,33 +698,11 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                             </div>
                         </div>
 
-                        <div class="col-xl-6">
-                            <div class="card">
+
+                        <div class="col-xl-9">
+                              <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mb-4">Sales Report</h4>
-
-                                    <div id="line-chart" class="apex-charts"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Revenue</h4>
-
-                                    <div id="column-chart" class="apex-charts"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end row -->
-
-                    <div class="row">
-                        <div class="col-xl-5">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Sales Analytics</h4>
+                                    <h4 class="card-title mb-5">Sales Analytics</h4>
 
                                     <div class="row align-items-center">
                                         <div class="col-sm-6">
@@ -759,234 +741,10 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-xl-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Monthly Sales</h4>
-
-                                    <div id="scatter-chart" class="apex-charts"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3">
-                            <div class="card bg-primary">
-                                <div class="card-body">
-                                    <div class="text-white-50">
-                                        <h5 class="text-white">2400 + New Users</h5>
-                                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus</p>
-                                        <div>
-                                            <a href="#" class="btn btn-outline-success btn-sm">View more</a>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-end">
-                                        <div class="col-8">
-                                            <div class="mt-4">
-                                                <img src="assets/images/widget-img.png" alt=""
-                                                    class="img-fluid mx-auto d-block">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!-- end row -->
 
-                    <div class="row">
-                        <div class="col-xl-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Overview</h4>
-
-                                    <div>
-                                        <div class="pb-3 border-bottom">
-                                            <div class="row align-items-center">
-                                                <div class="col-8">
-                                                    <p class="mb-2">New Visitors</p>
-                                                    <h4 class="mb-0">3,524</h4>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="text-end">
-                                                        <div>
-                                                            2.06 % <i class="mdi mdi-arrow-up text-success ms-1"></i>
-                                                        </div>
-                                                        <div class="progress progress-sm mt-3">
-                                                            <div class="progress-bar" role="progressbar" style="width: 62%"
-                                                                aria-valuenow="62" aria-valuemin="0" aria-valuemax="100">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="py-3 border-bottom">
-                                            <div class="row align-items-center">
-                                                <div class="col-8">
-                                                    <p class="mb-2">Product Views</p>
-                                                    <h4 class="mb-0">2,465</h4>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="text-end">
-                                                        <div>
-                                                            0.37 % <i class="mdi mdi-arrow-up text-success ms-1"></i>
-                                                        </div>
-                                                        <div class="progress progress-sm mt-3">
-                                                            <div class="progress-bar bg-warning" role="progressbar"
-                                                                style="width: 48%" aria-valuenow="48" aria-valuemin="0"
-                                                                aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="pt-3">
-                                            <div class="row align-items-center">
-                                                <div class="col-8">
-                                                    <p class="mb-2">Revenue</p>
-                                                    <h4 class="mb-0">$ 4,653</h4>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="text-end">
-                                                        <div>
-                                                            2.18 % <i class="mdi mdi-arrow-up text-success ms-1"></i>
-                                                        </div>
-                                                        <div class="progress progress-sm mt-3">
-                                                            <div class="progress-bar bg-success" role="progressbar"
-                                                                style="width: 78%" aria-valuenow="78" aria-valuemin="0"
-                                                                aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Reviews</h4>
-                                    <div class="mb-4">
-                                        <h5><span class="text-primary">500</span>+ Satisfied clients</h5>
-                                    </div>
-                                    <div class="mb-3">
-                                        <i class="fas fa-quote-left h4 text-primary"></i>
-                                    </div>
-                                    <div id="reviewExampleControls" class="carousel slide review-carousel"
-                                        data-ride="carousel">
-
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <div>
-                                                    <p>To achieve this, it would be necessary to have uniform grammar,
-                                                        pronunciation and more common words</p>
-                                                    <div class="d-flex align-items-start mt-4">
-                                                        <div class="avatar-sm me-3">
-                                                            <span
-                                                                class="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                                J
-                                                            </span>
-                                                        </div>
-                                                        <div class="flex-1">
-                                                            <h5 class="font-size-16 mb-1">Jessie Mitchell</h5>
-                                                            <p class="mb-2">CEO of ABC Company</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="carousel-item">
-                                                <div>
-                                                    <p>For science, music, sport, etc, Europe uses the same vocabulary
-                                                        languages only differ in their grammar</p>
-                                                    <div class="d-flex align-items-start mt-4">
-                                                        <div class="avatar-sm me-3">
-                                                            <img src="assets/images/users/avatar-4.jpg" alt=""
-                                                                class="img-fluid rounded-circle">
-                                                        </div>
-                                                        <div class="flex-1">
-                                                            <h5 class="font-size-16 mb-1">Kelly Rivera</h5>
-                                                            <p class="mb-2">Web Developer</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="carousel-item">
-                                                <div>
-                                                    <p>The new common language will be more simple and regular than the
-                                                        existing European languages.</p>
-                                                    <div class="d-flex align-items-start mt-4">
-                                                        <div class="avatar-sm me-3">
-                                                            <span
-                                                                class="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                                S
-                                                            </span>
-                                                        </div>
-                                                        <div class="flex-1">
-                                                            <h5 class="font-size-16 mb-1">Simon Hawkins</h5>
-                                                            <p class="mb-2">CEO of XYZ Company</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <a class="carousel-control-prev" href="#reviewExampleControls" role="button"
-                                            data-bs-slide="prev">
-                                            <i class="mdi mdi-chevron-left carousel-control-icon"></i>
-                                        </a>
-                                        <a class="carousel-control-next" href="#reviewExampleControls" role="button"
-                                            data-bs-slide="next">
-                                            <i class="mdi mdi-chevron-right carousel-control-icon"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-4">Revenue by location</h4>
-
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div id="usa-vectormap" style="height: 230px"></div>
-                                        </div>
-
-                                        <div class="col-sm-5 ms-auto">
-                                            <div class="mt-4 mt-sm-0">
-                                                <p>Last month Revenue</p>
-
-                                                <div class="d-flex align-items-start py-3">
-                                                    <div class="flex-1">
-                                                        <p class="mb-2">California</p>
-                                                        <h5 class="mb-0">$ 2,256</h5>
-                                                    </div>
-                                                    <div class="ms-auto">
-                                                        2.52 % <i class="mdi mdi-arrow-up text-success ms-1"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex align-items-start py-3 border-top">
-                                                    <div class="flex-1">
-                                                        <p class="mb-2">Nevada</p>
-                                                        <h5 class="mb-0">$ 1,853</h5>
-                                                    </div>
-                                                    <div class="ms-auto">
-                                                        1.26 % <i class="mdi mdi-arrow-up text-success ms-1"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
                     <!-- end row -->
 
                     <div class="row">
@@ -1250,8 +1008,30 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <script src="assets/libs/node-waves/waves.min.js"></script>
     <script src="assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
 
+        
+    <!-- Required datatable js -->
+    <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script> 
+    <!-- Buttons examples -->
+    <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="assets/libs/jszip/jszip.min.js"></script>
+    <script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Responsive examples -->
+    <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+    <!-- Datatable init js -->
+    <script src="assets/js/pages/datatables.init.js"></script>
+
+
     <!-- apexcharts -->
     <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
 
     <!-- jquery.vectormap map -->
     <script src="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
@@ -1262,6 +1042,41 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <script src="assets/js/app.js"></script>
 
     <script>
+         function confirmLogout() {
+        if (typeof Swal === 'undefined') {
+            if (confirm('Are you sure you want to sign out?')) {
+                window.location.href = 'logout.php';
+            }
+            return;
+        }
+        Swal.fire({
+            title: 'Sign Out?',
+            text: 'Are you sure you want to sign out of your account?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Sign Out',
+            cancelButtonText: 'Cancel',
+            customClass: { popup: 'logout-confirmation' }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Signing Out...',
+                    text: 'Please wait while we sign you out.',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => { Swal.showLoading(); }
+                });
+                setTimeout(() => { window.location.href = 'logout.php'; }, 1000);
+            }
+        }).catch(() => {
+            window.location.href = 'logout.php';
+        });
+    }
+    window.confirmLogout = confirmLogout;
+
+
      // If you use getpage() or loadNavPage(), call setActiveMenuByUrl(url) after loading
      function getpage(url, target) {
      $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
@@ -1270,6 +1085,7 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
      setActiveMenuByUrl(url);
      });
      }
+    
      function loadNavPage(url, target, menu_id) {
      $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
      $.get(url, function(data) {
@@ -1277,7 +1093,26 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
      setActiveMenuByUrl(url);
      });
      }
-</script>
+
+     function loadModal(url, target) {
+    $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
+    $.get(url, function(data) {
+        $("#" + target).html(data);
+        $('#defaultModalPrimary').modal('show');
+    });
+}
+    </script>
+
+    <div class="modal fade" id="defaultModalPrimary" tabindex="-1" role="dialog" aria-labelledby="defaultModalPrimaryLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal_div">
+                   
+        
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div> <!--end modal-->
 
     </body>
 

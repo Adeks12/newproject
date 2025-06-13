@@ -2,41 +2,26 @@
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">Item Category Management</h5>
-            <h6 class="card-subtitle text-muted">The report contains Item Categories that have been setup in the system.
-            </h6>
+            <h6 class="card-subtitle text-muted">The report contains Item Categories that have been setup in the system.</h6>
         </div>
         <div class="card-body">
-            <a class="btn btn-warning mb-3" onclick="loadModal('setup/item_cat_setup.php','modal_div')"
+            <a class="btn btn-outline-primary mb-3" onclick="loadModal('setup/item_cat_setup.php','modal_div')"
                 href="javascript:void(0)" data-toggle="modal" data-target="#defaultModalPrimary">
                 <i class="fas fa-plus"></i> Create Item Category
             </a>
 
-            <div class="mb-3">
-                <label for="parentCatFilter" class="form-label">Filter by Main Category:</label>
-                <select id="parentCatFilter" class="form-select" style="width:auto; display:inline-block;">
-                    <option value="all">All Categories</option>
-                    <!-- Main categories will be loaded here by JS -->
-                </select>
-            </div>
-
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Item Category List</h5>
-                            <h6 class="card-subtitle text-muted">Manage your organization's item categories</h6>
-                        </div>
                         <div class="card-body">
-                            <!-- Controls Row: Search & Pagination above table -->
-                            <div class="row mb-3 align-items-center">
-                                <div class="col-md-6">
-                                    <div id="itemCatsTable_filter" class="dataTables_filter"></div>
-                                </div>
-                                <div class="col-md-6 text-end">
-                                    <div id="itemCatsTable_length" class="dataTables_length"></div>
-                                </div>
-                            </div>
-                            <table id="datatables-item-cats" class="table table-striped w-100">
+
+                            <h4 class="card-title">Item Category List</h4>
+                            <p class="card-title-desc">
+                                Manage your organization's item categories
+                            </p>
+
+                            <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -50,12 +35,7 @@
                                 <tbody>
                                 </tbody>
                             </table>
-                            <!-- Pagination below table, but you can move it if you want -->
-                            <div class="row mt-2">
-                                <div class="col-12">
-                                    <div id="itemCatsTable_paginate" class="dataTables_paginate"></div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -63,145 +43,143 @@
         </div>
     </div>
 </div>
+
 <style>
-    /* Ensure DataTable search and length controls are aligned and responsive */
-    .dataTables_wrapper .row.mb-3.align-items-center {
+.dataTables_wrapper .row.mb-3.align-items-center {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem !important;
+}
+.dataTables_wrapper .row.mb-3 .col-md-6 {
+    flex: 1 1 0;
+    min-width: 220px;
+    margin-bottom: 0.5rem;
+}
+.dataTables_wrapper .dataTables_length {
+    float: left;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    text-align: right;
+    margin-bottom: 1rem;
+}
+.dataTables_wrapper .dataTables_info {
+    float: left;
+    margin-top: 0.5rem;
+}
+.dataTables_wrapper .dataTables_paginate {
+    float: right;
+    margin-top: 0.5rem;
+}
+.dataTables_filter {
+    text-align: left !important;
+    margin-bottom: 0 !important;
+}
+.dataTables_length {
+    text-align: right !important;
+    margin-bottom: 0 !important;
+}
+.dataTables_wrapper .row {
+    margin-bottom: 1rem;
+}
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 1rem;
+}
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+.dataTables_wrapper .dataTables_length select {
+    margin: 0 0.5rem;
+}
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5rem;
+}
+@media (min-width: 768px) {
+    .dataTables_wrapper .row:first-child {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
-        margin-bottom: 1rem !important;
+        flex-wrap: wrap;
     }
-
-    .dataTables_wrapper .row.mb-3 .col-md-6 {
+    .dataTables_wrapper .dataTables_length {
         flex: 1 1 0;
-        min-width: 220px;
-        margin-bottom: 0.5rem;
+        text-align: left;
     }
-
-    .dataTables_filter {
-        text-align: left !important;
-        margin-bottom: 0 !important;
+    .dataTables_wrapper .dataTables_filter {
+        flex: 1 1 0;
+        text-align: right;
     }
-
-    .dataTables_length {
-        text-align: right !important;
-        margin-bottom: 0 !important;
+}
+@media (max-width: 767.98px) {
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        text-align: left;
     }
-
-    @media(max-width: 600px){
-        .dataTables_wrapper .row.mb-3 .col-md-6 {
-        min-width: 100%;
-        text-align: left !important;
-    }
-
-    .dataTables_length,
-    .dataTables_filter {
-        text-align: left !important;
-    }
-    }
+}
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after {
+    opacity: 1 !important;
+    display: inline-block !important;
+}
 </style>
 
 <script>
-    var table;
-    var editor;
-    var op = "item_cat.item_catList"; // Operation for DataTable
-
     $(document).ready(function () {
-        // Add debugging to check if jQuery is loaded
-        console.log('jQuery loaded:', typeof $ !== 'undefined');
-        console.log('Loading item categories...');
-
-        // Load main categories for dropdown
-        $.post('utilities.php', {
-            op: 'item_cat.getAllitem_cats',
-            only_main: 1
-        }, function (resp) {
-            console.log('Main categories response:', resp);
-            if (resp && resp.response_code == 0 && resp.data && Array.isArray(resp.data)) {
-                resp.data.forEach(function (cat) {
-                    $('#parentCatFilter').append(
-                        $('<option>', {
-                            value: cat.id,
-                            text: cat.item_cat_name
-                        })
-                    );
-                });
-            } else {
-                console.error('Failed to load main categories:', resp);
-            }
-        }, 'json').fail(function (xhr, status, error) {
-            console.error('Error loading main categories:', error, xhr.responseText);
-        });
-
-        // Initialize DataTable with dom option for controls above table
-        table = $("#datatables-item-cats").DataTable({
-            dom: '<"row mb-3 align-items-center"<"col-md-6"f><"col-md-6 text-end"l>>rt<"row mt-2"<"col-12"p>>',
+        $('#datatable').DataTable({
+            responsive: true,
             processing: true,
-            columnDefs: [
-                { orderable: false, targets: 0 },
-                { width: "100px", targets: 3 }
-            ],
             serverSide: true,
-            paging: true,
-            oLanguage: {
-                sEmptyTable: "No record was found, please try another query"
-            },
             ajax: {
-                url: "utilities.php",
-                type: "POST",
-                data: function (d, l) {
-                    d.op = op;
-                    d.li = Math.random();
-                    d.parent_cat_id = $('#parentCatFilter').val();
-                    return d;
-                },
-                dataSrc: function (json) {
-                    return json.data || [];
+                url: 'utilities.php',
+                type: 'POST',
+                data: {
+                    op: 'item_cat.item_catList'
                 }
+            },
+            columns: [
+                { data: 0, name: 'id' },
+                { data: 1, name: 'item_code' },
+                { data: 2, name: 'item_cat_name' },
+                { data: 3, name: 'status' },
+                { data: 4, name: 'created_at' },
+                { data: 5, name: 'actions', orderable: false }
+            ],
+            oLanguage: {
+                sEmptyTable: "No record was found, please try another query",
+                sProcessing: "Loading item categories..."
             }
-        });
-
-        // On dropdown change, reload table
-        $('#parentCatFilter').on('change', function () {
-            console.log('Filter changed to:', $(this).val());
-            table.ajax.reload();
         });
     });
 
-    function edititem_cat(itemCatId) {
-        console.log('Editing item category:', itemCatId);
-        loadModal('setup/item_cat_setup.php?op=edit&item_cat_id=' + itemCatId, 'modal_div');
-        $('#defaultModalPrimary').modal('show');
+    function edititem_cat(item_cat_id) {
+        loadModal('setup/item_cat_setup.php?op=edit&item_cat_id=' + item_cat_id, 'modal_div');
     }
 
-    function deleteitem_cat(itemCatId) {
-        console.log('Deleting item category:', itemCatId);
-        if (confirm('Are you sure you want to delete this item category? This action cannot be undone.')) {
-            $.post('utilities.php', {
-                op: 'item_cat.deleteitem_cat',
-                item_cat_id: itemCatId
-            }, function (response) {
-                console.log('Delete response:', response);
-                if (response.response_code == 0) {
-                    alert('Item category deleted successfully');
-                    refreshItemCatList();
+    function deleteitem_cat(item_cat_id) {
+        if (confirm("Are you sure you want to delete this item category?")) {
+            $.post('utilities.php', { op: 'item_cat.deleteitem_cat', item_cat_id: item_cat_id }, function (resp) {
+                if (resp.response_code == 0) {
+                    alert(resp.response_message);
+                    $('#datatable').DataTable().ajax.reload();
                 } else {
-                    alert('Error: ' + response.response_message);
+                    alert(resp.response_message);
                 }
-            }, 'json').fail(function (xhr, status, error) {
-                console.error('Delete error:', error, xhr.responseText);
-                alert('An error occurred while deleting the item category');
-            });
+            }, 'json');
         }
     }
 
-    function refreshItemCatList() {
-        console.log('Refreshing item category list...');
-        if (table) {
-            table.ajax.reload();
-        }
+    function loadModal(url, target) {
+        $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
+        $.get(url, function(data) {
+            $("#" + target).html(data);
+            $('#defaultModalPrimary').modal('show');
+        });
     }
-
-    // Global function to refresh table after modal operations
-    window.refreshItemCatList = refreshItemCatList;
 </script>

@@ -27,8 +27,8 @@ class Department extends dbobject
                 'dt' => 6,
                 'formatter' => function( $d, $row ) {
                     return '<div class="d-flex gap-1">
-                        <button class="btn btn-sm btn-primary" onclick="editDepartment('.$d.')">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteDepartment('.$d.')">Delete</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="editDepartment('.$d.')"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteDepartment('.$d.')"><i class="fas fa-trash-alt"></i></button>
                     </div>';
                 }
             )
