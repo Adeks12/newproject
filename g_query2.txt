@@ -1,1 +1,1 @@
-SELECT COUNT(depmt_id) AS counter FROM department WHERE  1 = 1  AND merchant_id = 'PRO-773289' order by depmt_id asc
+SELECT COUNT(username) AS counter FROM userdata WHERE  1 = 1  AND role_id <> '001' AND role_id <> '001' order by username asc

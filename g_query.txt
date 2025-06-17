@@ -1,1 +1,1 @@
-SELECT depmt_id,depmt_name,depmt_code,depmt_head,depmt_status,created_at,depmt_id FROM department WHERE  1 = 1  AND merchant_id = 'PRO-773289' order by depmt_id asc  LIMIT 0, 10
+SELECT username,username,firstname,lastname,church_id,status,mobile_phone,role_id,email,pin_missed,user_disabled,username,created FROM userdata WHERE  1 = 1  AND role_id <> '001' AND role_id <> '001' order by username asc  LIMIT 0, 10

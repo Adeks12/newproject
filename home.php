@@ -55,6 +55,7 @@ $result_inventory = $dbobject->db_query($sql_inventory, true);
 $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]['cnt'] : 0;
 ?>
 
+
 <!doctype html>
 <html lang="en" >
 
