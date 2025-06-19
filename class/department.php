@@ -8,22 +8,28 @@ class Department extends dbobject
     public function departmentList($data)
     {
         $table_name    = "department";
-        $primary_key   = "depmt_id";
+        $primary_key   = "department.depmt_id";
         $columner = array(
-            array( 'db' => 'depmt_id', 'dt' => 0 ),
-            array( 'db' => 'depmt_name', 'dt' => 1 ),
+            array( 'db' => 'department.depmt_id', 'dt' => 0 ),
+            array( 'db' => 'department.depmt_name', 'dt' => 1 ),
             array( 'db' => 'depmt_code', 'dt' => 2 ),
-            array( 'db' => 'depmt_head', 'dt' => 3 ),
-            array( 
-                'db' => 'depmt_status', 
+            array(
+                'db' => "CONCAT(d.staff_first_name, ' ', d.staff_last_name)",
+                'dt' => 3,
+                'formatter' => function($d, $row) {
+                    return $d ?: '<span class=\"text-muted\">-</span>';
+                }
+            ),
+            array(
+                'db' => 'depmt_status',
                 'dt' => 4,
                 'formatter' => function( $d, $row ) {
                     return $d == '1' ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>';
                 }
             ),
-            array( 'db' => 'created_at', 'dt' => 5 ),
-            array( 
-                'db' => 'depmt_id', 
+            array( 'db' => 'department.created_at', 'dt' => 5 ),
+            array(
+                'db' => 'department.depmt_id',
                 'dt' => 6,
                 'formatter' => function( $d, $row ) {
                     return '<div class="d-flex gap-1">
@@ -33,13 +39,20 @@ class Department extends dbobject
                 }
             )
         );
+
+        $join = [
+            ["staff d" => ["department.depmt_head", "d.staff_id"]]
+        ];
+
+        $join_type = "LEFT JOIN";
         
         // Filter by merchant_id for security
         $merchant_id = $_SESSION['merchant_id'] ?? $data['merchant_id'] ?? '';
-        $filter = " AND merchant_id = '$merchant_id'";
+        $filter = " AND department.merchant_id = '$merchant_id'";
 
         $datatableEngine = new engine();
-        echo $datatableEngine->generic_table($data, $table_name, $columner, $primary_key, $filter);
+        echo $datatableEngine->generic_multi_table($data, $table_name, $columner, $primary_key, $join, $filter,
+        $join_type);
     }
 
     private function generateDepartmentCode($departmentName, $merchantId) {

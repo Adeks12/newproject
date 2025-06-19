@@ -1,4 +1,3 @@
-<div class="container-fluid p-0">
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">Inventory Management</h5>
@@ -11,17 +10,10 @@
             </a>
 
             <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
 
-                            <h4 class="card-title">Inventory List</h4>
-                            <p class="card-title-desc">
-                                Manage your organization's inventory items
-                            </p>
+                <div class="col-sm-12 table-responsive">
 
-                            <table id="datatable" class="table table-bordered dt-responsive nowrap"
-                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -45,100 +37,15 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+     
 
-<style>
-.dataTables_wrapper .row.mb-3.align-items-center {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 1rem !important;
-}
-.dataTables_wrapper .row.mb-3 .col-md-6 {
-    flex: 1 1 0;
-    min-width: 220px;
-    margin-bottom: 0.5rem;
-}
-.dataTables_wrapper .dataTables_length {
-    float: left;
-    text-align: left;
-    margin-bottom: 1rem;
-}
-.dataTables_wrapper .dataTables_filter {
-    float: right;
-    text-align: right;
-    margin-bottom: 1rem;
-}
-.dataTables_wrapper .dataTables_info {
-    float: left;
-    margin-top: 0.5rem;
-}
-.dataTables_wrapper .dataTables_paginate {
-    float: right;
-    margin-top: 0.5rem;
-}
-.dataTables_filter {
-    text-align: left !important;
-    margin-bottom: 0 !important;
-}
-.dataTables_length {
-    text-align: right !important;
-    margin-bottom: 0 !important;
-}
-.dataTables_wrapper .row {
-    margin-bottom: 1rem;
-}
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter {
-    margin-bottom: 1rem;
-}
-.dataTables_wrapper .dataTables_length label,
-.dataTables_wrapper .dataTables_filter label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0;
-}
-.dataTables_wrapper .dataTables_length select {
-    margin: 0 0.5rem;
-}
-.dataTables_wrapper .dataTables_filter input {
-    margin-left: 0.5rem;
-}
-@media (min-width: 768px) {
-    .dataTables_wrapper .row:first-child {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-    .dataTables_wrapper .dataTables_length {
-        flex: 1 1 0;
-        text-align: left;
-    }
-    .dataTables_wrapper .dataTables_filter {
-        flex: 1 1 0;
-        text-align: right;
-    }
-}
-@media (max-width: 767.98px) {
-    .dataTables_wrapper .dataTables_length,
-    .dataTables_wrapper .dataTables_filter {
-        text-align: left;
-    }
-}
-table.dataTable thead .sorting:after,
-table.dataTable thead .sorting_asc:after,
-table.dataTable thead .sorting_desc:after {
-    opacity: 1 !important;
-    display: inline-block !important;
-}
-</style>
+
+
 
 <script>
     $(document).ready(function () {
         $('#datatable').DataTable({
-            responsive: true,
+            responsive: false,
             processing: true,
             serverSide: true,
             ajax: {

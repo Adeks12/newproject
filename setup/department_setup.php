@@ -7,6 +7,12 @@ $sql = ("SELECT merchant_id FROM userdata WHERE username = '$user' LIMIT 1");
 $doquery= $dbobject->db_query($sql, true);
 $merchant_id = $doquery[0]['merchant_id'];
 
+
+$sql1 = ("SELECT staff_id, staff_first_name, staff_last_name FROM staff WHERE merchant_id='$merchant_id' AND
+depmt_head=1");
+$doquery1 = $dbobject->db_query($sql1, true);
+$heads = $doquery1;
+
 if(isset($_REQUEST['op']) && $_REQUEST['op'] == 'edit')
 {
     // Fixed: Use consistent parameter name and add debugging
@@ -78,20 +84,24 @@ else
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="form-label">Department Name<span class="asterik">*</span></label>
-                    <input type="text" name="depmt_name" id="depmt_name" class="form-control"
-                        value="<?php echo ($operation == "edit" && $dept && isset($dept['depmt_name'])) ? htmlspecialchars($dept['depmt_name']) : ""; ?>"
-                        placeholder="Enter department name" autocomplete="off" required>
-                    <div class="invalid-feedback">Please enter the department name.</div>
+                    <label for="depmt_name">Department Name <span class="asterik">*</span></label>
+                    <input type="text" class="form-control" id="depmt_name" name="depmt_name" required value="<?php echo isset($dept['depmt_name']) ? $dept['depmt_name'] : ''; ?>">
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="form-label">Department Head<span class="asterik">*</span></label>
-                    <input type="text" name="depmt_head" id="depmt_head"
-                        value="<?php echo ($operation == "edit" && $dept && isset($dept['depmt_head'])) ? htmlspecialchars($dept['depmt_head']) : "" ?>"
-                        class="form-control" placeholder="Enter department head name" autocomplete="off" required>
-                    <div class="invalid-feedback">Please enter the department head name.</div>
+                    <label for="depmt_head">Department Head <span class="asterik">*</span></label>
+                    <select class="form-control" id="depmt_head" name="depmt_head" required>
+                        <option value="">--Select Department Head--</option>
+                        <?php
+                        if ($heads) {
+                            foreach ($heads as $head) {
+                                $selected = (isset($dept['depmt_head']) && $dept['depmt_head'] == $head['staff_id']) ? 'selected' : '';
+                                echo "<option value='{$head['staff_id']}' $selected>{$head['staff_first_name']} {$head['staff_last_name']}</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
         </div>

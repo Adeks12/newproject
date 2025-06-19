@@ -1,1 +1,1 @@
-insert into staff (merchant_id,staff_first_name,staff_last_name,staff_email,staff_phone_no,staff_address,depmt_id,staff_status,staff_description,created_at,created_officer,staff_code) VALUES ('PRO-773289','Stephen','James','James12@gmail.com','0911209303','Pankshin Plateau State','4','1','Web Developer','2025-06-17 13:12:31','Jesuslovestestimony@gmail.com','MIN076')
+insert into role (role_name,role_enabled,created,role_id) VALUES ('Staff','1','2025-06-19 10:00:44','014')

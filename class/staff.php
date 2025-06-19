@@ -6,7 +6,6 @@ class Staff extends dbobject
 {
     public function staffList($data)
     {
-        $table_name    = "staff";
         $table_name = "staff";
         $primary_key   = "staff_id";
         $columner = array(
@@ -39,7 +38,7 @@ class Staff extends dbobject
                 }
             )
         );
-        $table_name = "staff";
+        
         $join = [
         ["department d" => ["staff.depmt_id", "d.depmt_id"]]
         ];

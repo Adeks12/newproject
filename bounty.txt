@@ -1,3 +1,3 @@
-SELECT staff_id,staff_first_name,staff_last_name,staff_code,staff_email,staff_phone_no,depmt_name,staff_status,staff.created_at,staff_id FROM staff LEFT JOIN department d ON staff.depmt_id=d.depmt_id WHERE
-	 1 = 1 AND staff.merchant_id = 'PRO-773289' ORDER BY staff_id
+SELECT department.depmt_id,department.depmt_name,depmt_code,CONCAT(d.staff_first_name, ' ', d.staff_last_name),depmt_status,department.created_at,department.depmt_id FROM department LEFT JOIN staff d ON department.depmt_head=d.staff_id WHERE
+	 1 = 1  AND department.merchant_id = 'PRO-773289' ORDER BY department.depmt_id
 	asc LIMIT 0, 10

@@ -147,15 +147,20 @@ else
 
         <?php if($operation == "edit"): ?>
         <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="form-label">Staff Code</label>
-                    <input type="text" name="staff_code" class="form-control"
-                        value="<?php echo ($staff && isset($staff['staff_code'])) ? htmlspecialchars($staff['staff_code']) : ""; ?>"
-                        placeholder="Auto-generated" readonly>
-                    <small class="text-muted">Staff code is auto-generated and cannot be changed</small>
-                </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="depmt_head">Department Head <span class="asterik">*</span></label>
+                <select class="form-control" id="depmt_head" name="depmt_head" required>
+                    <option value="">--Select--</option>
+                    <option value="1"
+                        <?php echo (isset($staff['depmt_head']) && $staff['depmt_head'] == 1) ? 'selected' : ''; ?>>Yes
+                    </option>
+                    <option value="0"
+                        <?php echo (isset($staff['depmt_head']) && $staff['depmt_head'] == 0) ? 'selected' : ''; ?>>No
+                    </option>
+                </select>
             </div>
+        </div>
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="form-label" style="display:block !important">Staff Status<span
