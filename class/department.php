@@ -14,10 +14,12 @@ class Department extends dbobject
             array( 'db' => 'department.depmt_name', 'dt' => 1 ),
             array( 'db' => 'depmt_code', 'dt' => 2 ),
             array(
-                'db' => "CONCAT(d.staff_first_name, ' ', d.staff_last_name)",
+                'db' => 'd.staff_first_name',
                 'dt' => 3,
                 'formatter' => function($d, $row) {
-                    return $d ?: '<span class=\"text-muted\">-</span>';
+                    $firstname = $this->getitemlabel('staff', 'staff_id', $row['depmt_head'], 'staff_first_name');
+                    $lastname = $this->getitemlabel('staff', 'staff_id', $row['depmt_head'], 'staff_last_name');
+                    return $firstname." " . $lastname;
                 }
             ),
             array(
@@ -37,7 +39,8 @@ class Department extends dbobject
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteDepartment('.$d.')"><i class="fas fa-trash-alt"></i></button>
                     </div>';
                 }
-            )
+            ),
+            array('db' => 'department.depmt_head'),
         );
 
         $join = [

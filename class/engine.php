@@ -130,7 +130,7 @@ class engine extends dbobject
 	$ed = explode(".",$columner[$cnt]['db']);
 	$ii = (count($ed) == 2)?1:0;
 	$data = $row[$ed[$ii]];
-	$index = $columner[$cnt]['dt'];
+	$index = $columner[$cnt]['dt'] ?? '';
 	}
 
 	// Get primary key value for ID generation
