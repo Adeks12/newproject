@@ -1,5 +1,4 @@
-
-    <div class="card">
+<div class="card">
         <div class="dropdown d-inline-block d-lg-none ms-2">
         <button type="button" class="btn header-item noti-icon waves-effect"
             id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -118,5 +117,9 @@
             $("#" + target).html(data);
             $('#defaultModalPrimary').modal('show');
         });
+    }
+
+    function refreshDepartmentList() {
+        $('#datatable').DataTable().ajax.reload(null, false);
     }
 </script>

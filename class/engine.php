@@ -113,7 +113,7 @@ class engine extends dbobject
 
 	$big_data = array("draw"=>$this->draw,"recordsFiltered"=>$pagination,"recordsTotal"=>$pagination);
 
-	if(count($result) > 0)
+	if($result && count($result) > 0)
 	{
 	$rw = array();
 	$serial_no = $start;

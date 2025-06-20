@@ -91,7 +91,7 @@ else
             <div class="col-sm-6">
                 <div class="form-group">
                     <label for="depmt_head">Department Head <span class="asterik">*</span></label>
-                    <select class="form-control" id="depmt_head" name="depmt_head" required>
+                    <select class="form-control" id="depmt_head" name="depmt_head">
                         <option value="">--Select Department Head--</option>
                         <?php
                         if ($heads) {

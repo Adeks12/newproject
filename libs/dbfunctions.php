@@ -154,7 +154,7 @@ class dbobject extends validation
 		foreach ($arr as $key => $value) {
 			if (!in_array($key, $exp_arr)) {
 				$patch1 .= $key . ",";
-				$patch2 .= "'" . mysqli_real_escape_string($this->myconn, $value) . "',";
+				$patch2 .= "'" . ($value !== null ? mysqli_real_escape_string($this->myconn, $value) : '') . "',";
 			}
 		}
 		$patch1 =  substr($patch1, 0, -1) . ")";
@@ -172,7 +172,7 @@ class dbobject extends validation
 		$this->myconn = $cnx->connect();
 		foreach ($arr as $key => $value) {
 			if (!in_array($key, $exp_arr)) {
-				$patch1 .= $key . "='" . mysqli_real_escape_string($this->myconn, $value) . "',";
+				$patch1 .= $key . "='" . ($value !== null ? mysqli_real_escape_string($this->myconn, $value) : '') . "',";
 			}
 		}
 		foreach ($clause as $key => $value) {

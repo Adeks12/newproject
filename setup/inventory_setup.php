@@ -120,7 +120,7 @@ $categories = $dbobject->db_query($categories_sql, true);
             </div>
             <div class="form-group mb-3">
                 <label for="allocated_by" class="form-label">Allocated By</label>
-                <input type="text" name="allocated_by" id="allocated_by" class="form-control" value="<?php echo htmlspecialchars($_SESSION['username_sess']); ?>" readonly>
+                <input type="text" name="allocated_by" id="allocated_by" class="form-control" value="<?php echo htmlspecialchars($_SESSION['username_sess']); ?>" readonly required>
             </div>
             <div class="form-group mb-3">
                 <label for="allocated_date" class="form-label">Allocated Date</label>
@@ -277,6 +277,18 @@ $categories = $dbobject->db_query($categories_sql, true);
         </div>
         <?php endif; ?>
 
+        <?php if($operation == "edit" && $item): ?>
+            <div class="row mb-3">
+                    <button type="button" class="btn btn-success" onclick="markItemReturned(<?php echo $item['item_id']; ?>)">
+                        Mark as Returned
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="markItemForRepair(<?php echo $item['item_id']; ?>)">
+                        Mark as For Repair
+                    </button>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <div class="row">
             <div class="col-sm-12">
                 <div id="server_mssg"></div>
@@ -292,6 +304,23 @@ $categories = $dbobject->db_query($categories_sql, true);
         <?php endif; ?>
     </form>
 </div>
+
+<!-- Allocation History Modal -->
+<div class="modal fade" id="allocationHistoryModal" tabindex="-1" aria-labelledby="allocationHistoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="allocationHistoryModalLabel">Allocation History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="allocation-history-content">
+        <!-- Allocation history will be loaded here via AJAX -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <script>
     $(document).ready(function () {
@@ -419,4 +448,87 @@ $categories = $dbobject->db_query($categories_sql, true);
             }
         });
     }
+
+    function showAddMaintenanceForm() {
+      document.getElementById('add-maintenance-form').style.display = 'block';
+    }
+    function hideAddMaintenanceForm() {
+      document.getElementById('add-maintenance-form').style.display = 'none';
+    }
+    function submitMaintenanceForm() {
+      var form = document.getElementById('maintenanceForm');
+      var formData = new FormData(form);
+      formData.append('op', 'inventory.logMaintenanceAction');
+      fetch('utilities.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.response_message);
+        if(data.response_code === 0) {
+          hideAddMaintenanceForm();
+          loadMaintenanceLog(<?php echo $item['item_id']; ?>);
+        }
+      });
+    }
+    function safeShowModal(modalId) {
+      // Hide any open modals first
+      $('.modal:visible').modal('hide');
+      setTimeout(function() {
+        $(modalId).modal('show');
+      }, 300); // Wait for previous modal to close
+    }
+   
+    function markItemReturned(item_id) {
+      if(confirm('Mark this item as returned?')) {
+        fetch('utilities.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: 'op=inventory.markItemReturned&item_id=' + item_id
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.response_message);
+          if(data.response_code === 0) location.reload();
+        });
+      }
+    }
+    function markItemForRepair(item_id) {
+      if(confirm('Mark this item as for repair?')) {
+        fetch('utilities.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: 'op=inventory.markItemForRepair&item_id=' + item_id
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.response_message);
+          if(data.response_code === 0) location.reload();
+        });
+      }
+    }
+    // Update modal triggers to use new loader
+    $(document).ready(function() {
+      $('#allocationHistoryModal').on('show.bs.modal', function (e) {
+        // Prevent default show, use loader instead
+        e.preventDefault();
+        loadAllocationHistory(<?php echo $item['item_id'] ?? 'null'; ?>);
+        return false;
+      });
+      $('#maintenanceLogModal').on('show.bs.modal', function (e) {
+        e.preventDefault();
+        loadMaintenanceLog(<?php echo $item['item_id'] ?? 'null'; ?>);
+        return false;
+      });
+      // Attach click handlers to buttons
+      $("button[data-bs-target='#allocationHistoryModal']").off('click').on('click', function(e) {
+        e.preventDefault();
+        loadAllocationHistory(<?php echo $item['item_id'] ?? 'null'; ?>);
+      });
+      $("button[data-bs-target='#maintenanceLogModal']").off('click').on('click', function(e) {
+        e.preventDefault();
+        loadMaintenanceLog(<?php echo $item['item_id'] ?? 'null'; ?>);
+      });
+    });
 </script>

@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 ini_set('display_errors', 1);   
 
 class inventory extends dbobject
@@ -44,14 +44,12 @@ class inventory extends dbobject
             }),
             array('db' => 'i.item_id', 'dt' => 10, 'formatter' => function($d, $row) {
                 return '<div class="d-flex gap-1">
-                             <button class="btn btn-sm btn-outline-secondary" onclick="editInventory('.$d.')"><i
-                                     class="fas fa-pencil-alt"></i></button>
-                                     <button class="btn btn-sm btn-outline-secondary" onclick="allocateInventory('.$d.')"><i 
-                                     class="fas fa-handshake"></i></button>
-                             <button class="btn btn-sm btn-outline-danger" onclick="deleteInventory('.$d.')"><i
-                                     class="fas fa-trash-alt"></i></button>
-                            
-                        </div>';
+        <button class="btn btn-sm btn-outline-secondary" onclick="editInventory('.$d.')"><i class="fas fa-pencil-alt"><br>Edit</i></button>
+        <button class="btn btn-sm btn-outline-success" onclick="allocateInventory('.$d.')"><i class="fas fa-handshake"><br>Allocate Item</i></button>
+        <button class="btn btn-sm btn-outline-info" onclick="viewAllocationHistory('.$d.')"><i class="fas fa-history"></i> Allocation History</button>
+        <button class="btn btn-sm btn-outline-warning" onclick="viewMaintenanceLog('.$d.')"><i class="fas fa-tools"></i> Maintenance Log</button>
+        <button class="btn btn-sm btn-outline-danger" onclick="deleteInventory('.$d.')"><i class="fas fa-trash-alt"></i>Delete</button>
+    </div>';
             })
         );
 
@@ -142,8 +140,21 @@ class inventory extends dbobject
                     $excluded_keys = ['op', 'operation', 'nrfa-csrf-token-label'];
                     $res = $this->doInsert('inventory', $data, $excluded_keys);
 
+                    // Log allocation if allocated
+                    if($data['allocation_status'] == 'Allocated' && !empty($data['allocated_officer'])) {
+                        $this->logAllocationHistory([
+                            'item_id' => $data['item_id'],
+                            'staff_id' => $data['allocated_officer'],
+                            'department_id' => $data['department_id'] ?? null,
+                            'allocated_date' => $data['allocated_date'],
+                            'status' => 'active',
+                            'notes' => $data['notes'] ?? null
+                        ]);
+                    }
+
                     if($res == "1" || $res === true)
                     {
+                        ob_clean();
                         return json_encode(array(
                             "response_code" => 0,
                             "response_message" => "Inventory item created successfully with code: " . $data['item_code']
@@ -151,6 +162,7 @@ class inventory extends dbobject
                     }
                     else
                     {
+                        ob_clean();
                         error_log("Insert failed with result: " . print_r($res, true));
                         return json_encode(array("response_code" => 78, "response_message" => "Failed to create inventory item"));
                     }
@@ -170,6 +182,18 @@ class inventory extends dbobject
                         $data['allocated_by'] = $_SESSION['username_sess'] ?? 'system';
                     }
 
+                    // Log allocation if status changed to allocated
+                    if($current_item[0]['allocation_status'] != 'Allocated' && $data['allocation_status'] == 'Allocated' && !empty($data['allocated_officer'])) {
+                        $this->logAllocationHistory([
+                            'item_id' => $data['item_id'],
+                            'staff_id' => $data['allocated_officer'],
+                            'department_id' => $data['department_id'] ?? null,
+                            'allocated_date' => $data['allocated_date'],
+                            'status' => 'active',
+                            'notes' => $data['notes'] ?? null
+                        ]);
+                    }
+
                     $data['updated_at'] = date("Y-m-d H:i:s");
                     $data['updated_officer'] = $_SESSION['username_sess'] ?? 'system';
                     $merchant_id = $data['merchant_id'];
@@ -180,26 +204,31 @@ class inventory extends dbobject
                                       
                     if($res == "1" || $res === true)
                     {
+                        ob_clean();
                         return json_encode(array("response_code" => 0, "response_message" => "Inventory item updated successfully"));
                     }
                     else
                     {
+                        ob_clean();
                         error_log("Update failed with result: " . print_r($res, true));
                         return json_encode(array("response_code" => 79, "response_message" => "Failed to update inventory item"));
                     }
                 }
                 else
                 {
+                    ob_clean();
                     return json_encode(array("response_code" => 20, "response_message" => "Invalid operation"));
                 }
             }
             else
             {
+                ob_clean();
                 return json_encode(array("response_code" => 20, "response_message" => $validation['messages'][0]));
             }
         }
         catch(Exception $e)
         {
+            ob_clean();
             error_log("Inventory Creation Error: " . $e->getMessage());
             return json_encode(array("response_code" => 500, "response_message" => "An error occurred: " . $e->getMessage()));
         }
@@ -243,13 +272,16 @@ class inventory extends dbobject
             $result = $this->db_query($sql, false);
 
             if($result) {
+                ob_clean();
                 return json_encode(array("response_code" => 0, "response_message" => "Inventory item deleted successfully"));
             } else {
+                ob_clean();
                 return json_encode(array("response_code" => 80, "response_message" => "Failed to delete inventory item"));
             }
         }
         catch(Exception $e)
         {
+            ob_clean();
             error_log("Delete Inventory Error: " . $e->getMessage());
             return json_encode(array("response_code" => 500, "response_message" => $e->getMessage()));
         }
@@ -271,14 +303,132 @@ class inventory extends dbobject
             $sql = "UPDATE inventory SET allocation_status='Allocated', allocated_officer='$allocated_officer', allocated_by='$allocated_by', allocated_date='$allocated_date' WHERE item_id='$item_id' AND merchant_id='$merchant_id'";
             $result = $this->db_query($sql, false);
 
+            // Log allocation history
             if($result) {
+                $this->logAllocationHistory([
+                    'item_id' => $item_id,
+                    'staff_id' => $allocated_officer,
+                    'department_id' => $data['department_id'] ?? null,
+                    'allocated_date' => $allocated_date,
+                    'status' => 'active',
+                    'notes' => $data['notes'] ?? null
+                ]);
+                ob_clean();
                 return json_encode(array("response_code" => 0, "response_message" => "Inventory item allocated successfully"));
             } else {
+                ob_clean();
                 return json_encode(array("response_code" => 80, "response_message" => "Failed to allocate inventory item"));
             }
         } catch(Exception $e) {
+            ob_clean();
             error_log("Allocate Inventory Error: " . $e->getMessage());
             return json_encode(array("response_code" => 500, "response_message" => $e->getMessage()));
         }
+    }
+
+    // Log allocation/return to item_allocation_history
+    private function logAllocationHistory($data) {
+        $fields = [
+            'item_id', 'staff_id', 'department_id', 'allocated_date', 'status', 'notes'
+        ];
+        $insert = [];
+        foreach ($fields as $field) {
+            $insert[$field] = $data[$field] ?? null;
+        }
+        $insert['created_at'] = date('Y-m-d H:i:s');
+        $this->doInsert('item_allocation_history', $insert, []);
+    }
+
+    // Log maintenance/repair to item_maintenance_log
+    public function logMaintenanceAction($data) {
+        $fields = [
+            'item_id', 'reported_by', 'reported_date', 'issue_description', 'repair_date', 'repair_cost', 'maintenance_status', 'notes'
+        ];
+        $insert = [];
+        foreach ($fields as $field) {
+            $insert[$field] = $data[$field] ?? null;
+        }
+        $insert['created_at'] = date('Y-m-d H:i:s');
+        $res = $this->doInsert('item_maintenance_log', $insert, []);
+        if($res == "1" || $res === true) {
+            ob_clean();
+            return json_encode(["response_code" => 0, "response_message" => "Maintenance log created successfully"]);
+        } else {
+            ob_clean();
+            return json_encode(["response_code" => 80, "response_message" => "Failed to create maintenance log"]);
+        }
+    }
+
+    // Fetch allocation history for an item
+    public function getAllocationHistory($data) {
+        $item_id = intval($data['item_id']);
+        $sql = "SELECT h.*, s.staff_first_name, s.staff_last_name, d.depmt_name FROM item_allocation_history h
+                LEFT JOIN staff s ON h.staff_id = s.staff_id
+                LEFT JOIN department d ON h.department_id = d.depmt_id
+                WHERE h.item_id = '$item_id' ORDER BY h.allocated_date DESC";
+        $rows = $this->db_query($sql, true);
+        $html = '<table class="table table-bordered"><thead><tr><th>Staff</th><th>Department</th><th>Allocated Date</th><th>Returned Date</th><th>Status</th><th>Notes</th></tr></thead><tbody>';
+        if($rows && count($rows) > 0) {
+            foreach($rows as $row) {
+                $html .= '<tr>';
+                $html .= '<td>' . htmlspecialchars($row['staff_first_name'] . ' ' . $row['staff_last_name']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['depmt_name'] ?? '-') . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['allocated_date']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['returned_date'] ?? '-') . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['status']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['notes'] ?? '-') . '</td>';
+                $html .= '</tr>';
+            }
+        } else {
+            $html .= '<tr><td colspan="6">No allocation history found.</td></tr>';
+        }
+        $html .= '</tbody></table>';
+        echo $html;
+    }
+
+    // Fetch maintenance log for an item
+    public function getMaintenanceLog($data) {
+        $item_id = intval($data['item_id']);
+        $sql = "SELECT * FROM item_maintenance_log WHERE item_id = '$item_id' ORDER BY reported_date DESC";
+        $rows = $this->db_query($sql, true);
+        $html = '<table class="table table-bordered"><thead><tr><th>Reported By</th><th>Reported Date</th><th>Issue</th><th>Repair Date</th><th>Cost</th><th>Status</th><th>Notes</th></tr></thead><tbody>';
+        if($rows && count($rows) > 0) {
+            foreach($rows as $row) {
+                $html .= '<tr>';
+                $html .= '<td>' . htmlspecialchars($row['reported_by']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['reported_date']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['issue_description']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['repair_date'] ?? '-') . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['repair_cost'] ?? '-') . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['maintenance_status']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['notes'] ?? '-') . '</td>';
+                $html .= '</tr>';
+            }
+        } else {
+            $html .= '<tr><td colspan="7">No maintenance log found.</td></tr>';
+        }
+        $html .= '</tbody></table>';
+        echo $html;
+    }
+
+    // Mark item as returned
+    public function markItemReturned($data) {
+        $item_id = intval($data['item_id']);
+        // Update inventory
+        $this->doUpdate('inventory', ['allocation_status' => 'not_allocated', 'allocated_officer' => '', 'allocated_date' => '', 'usage_status' => 'Active'], [], ['item_id' => $item_id]);
+        // Update allocation history
+        $sql = "UPDATE item_allocation_history SET status='returned', returned_date=NOW() WHERE item_id='$item_id' AND status='active' ORDER BY allocated_date DESC LIMIT 1";
+        $this->db_query($sql, false);
+        ob_clean();
+        return json_encode(["response_code" => 0, "response_message" => "Item marked as returned."]);
+    }
+
+    // Mark item as for repair
+    public function markItemForRepair($data) {
+        $item_id = intval($data['item_id']);
+        // Update inventory
+        $this->doUpdate('inventory', ['usage_status' => 'Maintenance'], [], ['item_id' => $item_id]);
+        ob_clean();
+        return json_encode(["response_code" => 0, "response_message" => "Item marked as for repair/maintenance."]);
     }
 }

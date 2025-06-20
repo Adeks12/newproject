@@ -92,12 +92,10 @@ class Department extends dbobject
             $validation = $this->validate($data,
                 array(
                     'depmt_name' => 'required',
-                    'depmt_head' => 'required',
                     'depmt_status' => 'required'
                 ),
                 array(
                     'depmt_name' => 'Department Name',
-                    'depmt_head' => 'Department Head', 
                     'depmt_status' => 'Department Status'
                 )
             );

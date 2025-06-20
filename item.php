@@ -1,4 +1,4 @@
-<div class="container-fluid p-0">
+
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">Item Category Management</h5>
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
 
 <script>

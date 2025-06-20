@@ -1,4 +1,4 @@
-    <div class="card">
+<div class="card">
         <div class="card-header">
             <h5 class="card-title">Inventory Management</h5>
             <h6 class="card-subtitle text-muted">This report contains all inventory items in the system.</h6>
@@ -6,7 +6,12 @@
         <div class="card-body">
             <a class="btn btn-outline-primary mb-3" onclick="loadModal('setup/inventory_setup.php','modal_div')"
                 href="javascript:void(0)" data-toggle="modal" data-target="#defaultModalPrimary">
-                <i class="fas fa-plus"></i> Create Inventory Item
+                 Create Inventory Item
+            </a>
+
+            <a class="btn btn-outline-primary mb-3" onclick="loadModal('setup/maintenance_setup.php','modal_div')"
+                href="javascript:void(0)" data-toggle="modal" data-target="#defaultModalPrimary">
+                Input maintenance log
             </a>
 
             <div class="row">
@@ -38,8 +43,7 @@
                 </div>
             </div>
      
-
-
+   
 
 
 <script>
@@ -78,6 +82,7 @@
     function editInventory(id) {
         loadModal('setup/inventory_setup.php?op=edit&item_id=' + id, 'modal_div');
     }
+    
 
     function deleteInventory(id) {
         if (confirm("Are you sure you want to delete this inventory item?")) {
@@ -95,6 +100,7 @@
     function allocateInventory(id) {
         loadModal('setup/inventory_setup.php?op=allocate&item_id=' + id, 'modal_div');
     }
+    
 
     function loadModal(url, target) {
         $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
@@ -103,4 +109,32 @@
             $('#defaultModalPrimary').modal('show');
         });
     }
+    
+
+    function viewAllocationHistory(item_id) {
+    $("#modal_div").html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
+    $.get('utilities.php', { op: 'inventory.getAllocationHistory', item_id: item_id }, function(data) {
+    $("#modal_div").html(data);
+    $('#defaultModalPrimary').modal('show');
+    });
+    }
+
+    function viewMaintenanceLog(item_id) {
+    $("#modal_div").html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
+    $.get('utilities.php', { op: 'inventory.getMaintenanceLog', item_id: item_id }, function(data) {
+    $("#modal_div").html(data);
+    $('#defaultModalPrimary').modal('show');
+    });
+    }
+
+   
 </script>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="defaultModalPrimary" tabindex="-1" role="dialog" aria-labelledby="defaultModalPrimaryLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="modal_div">
+      <!-- Content loaded dynamically -->
+    </div>
+  </div>
+</div>

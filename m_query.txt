@@ -1,1 +1,1 @@
-insert into role (role_name,role_enabled,created,role_id) VALUES ('Staff','1','2025-06-19 10:00:44','014')
+insert into item_allocation_history (item_id,staff_id,department_id,allocated_date,status,notes,created_at) VALUES ('2','3','','2025-06-20','active','','2025-06-20 16:27:46')
