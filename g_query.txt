@@ -1,1 +1,1 @@
-SELECT item_cat_id,item_code,item_cat_name,item_status,created_at,item_cat_id,merchant_id,parent_cat_id FROM item_category WHERE  1 = 1  AND merchant_id = 'PRO-283008' order by item_cat_id asc  LIMIT 0, 10
+SELECT item_cat_id,item_code,item_cat_name,item_status,created_at,item_cat_id,merchant_id,parent_cat_id FROM item_category WHERE  1 = 1  AND merchant_id = 'PRO-773289' order by item_cat_id asc  LIMIT 0, 10

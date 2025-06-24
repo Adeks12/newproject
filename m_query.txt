@@ -1,1 +1,1 @@
-insert into item_allocation_history (item_id,staff_id,department_id,allocated_date,status,notes,created_at) VALUES ('2','3','','2025-06-20','active','','2025-06-20 16:27:46')
+insert into item (merchant_id,item_name,category_id,item_condition,color,quantity,status,purchase_date,warranty,location,created_at,created_officer,item_code) VALUES ('PRO-773289','Laptops','3','Good','White','12','Available','2025-06-17','3 years','Abuja','2025-06-24 12:55:03','Jesuslovestestimony@gmail.com','ITM310866')

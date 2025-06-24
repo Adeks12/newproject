@@ -1,1 +1,1 @@
-SELECT COUNT(item_cat_id) AS counter FROM item_category WHERE  1 = 1  AND merchant_id = 'PRO-283008' order by item_cat_id asc
+SELECT COUNT(item_cat_id) AS counter FROM item_category WHERE  1 = 1  AND merchant_id = 'PRO-773289' order by item_cat_id asc

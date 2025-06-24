@@ -22,7 +22,7 @@ if(isset($_REQUEST['op']) && $_REQUEST['op'] == 'edit')
     if(empty($department_id)) {
         echo "<script>console.log('Error: Department ID is missing');</script>";
         $dept = null;
-        $operation = 'new';
+        $operation = 'edit';
     } else {
         // Fixed: Add proper error handling and debugging
         $sql = "SELECT * FROM department WHERE depmt_id='$department_id' AND merchant_id='$merchant_id' LIMIT 1";
@@ -79,7 +79,9 @@ else
         <input type="hidden" name="merchant_id" id="merchant_id" value="<?php echo $merchant_id; ?>">
         <?php if($operation == "edit"): ?>
         <input type="hidden" name="depmt_id" value="<?php echo $department_id; ?>">
-        <?php endif; ?>
+        
+        <?php var_dump($department_id);
+     endif; ?>
 
         <div class="row">
             <div class="col-sm-6">

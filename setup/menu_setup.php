@@ -20,7 +20,7 @@ if(isset($_REQUEST['op']) && $_REQUEST['op'] == 'edit')
     $operation = 'edit';
     $menu_id = $_REQUEST['menu_id'];
     $sql_menu = "SELECT * FROM menu WHERE menu_id = '$menu_id' LIMIT 1";
-    $menu = $dbobject->db_query($sql_menu);
+$menu = $dbobject->db_query($sql_menu);
 }else
 {
     $operation = 'new';
