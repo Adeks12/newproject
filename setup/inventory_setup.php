@@ -278,14 +278,25 @@ $categories = $dbobject->db_query($categories_sql, true);
         <?php endif; ?>
 
         <?php if($operation == "edit" && $item): ?>
-            <div class="row mb-3">
-                    <button type="button" class="btn btn-success" onclick="markItemReturned(<?php echo $item['item_id']; ?>)">
-                        Mark as Returned
-                    </button>
-                    <button type="button" class="btn btn-danger" onclick="markItemForRepair(<?php echo $item['item_id']; ?>)">
-                        Mark as For Repair
-                    </button>
+            <div class="form-group mb-3">
+                <label class="form-label">Item Action</label>
+                <div class="d-flex gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="item_action" id="markReturned"
+                            value="returned" onclick="markItemReturned(<?php echo $item['item_id']; ?>)">
+                        <label class="form-check-label" for="markReturned">
+                            Mark as Returned
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="item_action" id="markRepair" value="repair"
+                            onclick="markItemForRepair(<?php echo $item['item_id']; ?>)">
+                        <label class="form-check-label" for="markRepair">
+                            Mark as For Repair
+                        </label>
+                    </div>
                 </div>
+            </div>
             </div>
         <?php endif; ?>
 

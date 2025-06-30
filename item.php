@@ -54,7 +54,7 @@
                 url: 'utilities.php',
                 type: 'POST',
                 data: {
-                    op: 'items.itemsList'
+                    op: 'inventory.inventoryList'
                 }
             },
             columns: [

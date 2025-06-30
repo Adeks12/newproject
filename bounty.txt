@@ -1,3 +1,3 @@
-SELECT item_id,item.item_code,item.item_name,d.item_cat_name,item_condition,color,quantity,status,purchase_date,warranty,location,item.created_at,item_id FROM item LEFT JOIN item_category d ON item.category_id=d.item_cat_id WHERE
-	 1 = 1 AND item.merchant_id = 'PRO-773289' ORDER BY item_id
+SELECT department.depmt_id,department.depmt_name,depmt_code,d.staff_first_name,depmt_status,department.created_at,department.depmt_id,department.depmt_head FROM department LEFT JOIN staff d ON department.depmt_head=d.staff_id WHERE
+	 1 = 1  AND department.merchant_id = 'PRO-773289' ORDER BY department.depmt_id
 	asc LIMIT 0, 10

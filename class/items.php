@@ -1,4 +1,6 @@
 <?php
+// DEPRECATED: Use class/inventory.php for all item and inventory management.
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 

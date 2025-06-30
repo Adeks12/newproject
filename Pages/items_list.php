@@ -22,7 +22,7 @@ $merchant_id = $_SESSION['merchant_id'];
       </div>
       <div class="modal-body">
         <form id="itemForm" autocomplete="off">
-          <input type="hidden" name="op" value="items.createItem">
+          <input type="hidden" name="op" value="inventory.createInventory">
           <input type="hidden" name="merchant_id" value="<?php echo $merchant_id; ?>">
           <input type="hidden" name="operation" id="item_operation" value="new">
           <input type="hidden" name="item_id" id="item_id">
@@ -31,12 +31,24 @@ $merchant_id = $_SESSION['merchant_id'];
             <input type="text" name="item_name" id="item_name" class="form-control" required>
           </div>
           <div class="mb-2">
-            <label>Category ID</label>
-            <input type="number" name="category_id" id="category_id" class="form-control" required>
+            <label>Category</label>
+            <select name="item_cat_id" id="item_cat_id" class="form-control" required>
+                <option value="">-- Select Category --</option>
+                <?php
+                    $cats = $dbobject->db_query("SELECT item_cat_id, item_cat_name FROM item_category WHERE merchant_id = '$merchant_id' AND item_status = '1'", true);
+                    foreach($cats as $cat) {
+                        echo "<option value='".$cat['item_cat_id']."'>".$cat['item_cat_name']."</option>";
+                    }
+                ?>
+            </select>
           </div>
           <div class="mb-2">
             <label>Condition</label>
-            <input type="text" name="condition" id="condition" class="form-control" required>
+            <select name="item_cond" id="item_cond" class="form-control" required>
+                <option value="new">New</option>
+                <option value="fairly_used">Fairly Used</option>
+                <option value="old">Old</option>
+            </select>
           </div>
           <div class="mb-2">
             <label>Color</label>
@@ -47,8 +59,21 @@ $merchant_id = $_SESSION['merchant_id'];
             <input type="number" name="quantity" id="quantity" class="form-control" required>
           </div>
           <div class="mb-2">
-            <label>Status</label>
-            <input type="text" name="status" id="status" class="form-control" required>
+            <label>Allocation Status</label>
+            <select name="allocation_status" id="allocation_status" class="form-control" required>
+                <option value="Available">Available</option>
+                <option value="Allocated">Allocated</option>
+                <option value="Reserved">Reserved</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label>Usage Status</label>
+            <select name="usage_status" id="usage_status" class="form-control" required>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Retired">Retired</option>
+            </select>
           </div>
           <div class="mb-2">
             <label>Purchase Date</label>
@@ -144,21 +169,10 @@ function loadItemsTable() {
     $.ajax({
         url: 'utilities.php',
         type: 'POST',
-        data: { op: 'items.itemsList' },
+        data: { op: 'inventory.inventoryList' },
         success: function(data) {
-            // Add action buttons for allocation history and maintenance log
-            var table = $('<div>').html(data);
-            table.find('tr').each(function() {
-                var row = $(this);
-                var itemId = row.find('td').eq(0).text();
-                if (!isNaN(parseInt(itemId))) {
-                    var actions = '<button class="btn btn-info btn-sm me-1" onclick="showAllocationHistory(' + itemId + ')">History</button>' +
-                                  '<button class="btn btn-warning btn-sm me-1" onclick="showMaintenanceLog(' + itemId + ')">Maintenance</button>' +
-                                  '<button class="btn btn-secondary btn-sm" onclick="editItem(' + itemId + ')">Edit</button>';
-                    row.find('td').last().append(actions);
-                }
-            });
-            $('#itemsTable').html(table.html());
+            // This should be a DataTable for better features, will standardize later.
+            $('#itemsTable').html(data);
         }
     });
 }
@@ -172,7 +186,7 @@ function editItem(item_id) {
     $.ajax({
         url: 'utilities.php',
         type: 'POST',
-        data: { op: 'items.getItem', item_id: item_id },
+        data: { op: 'inventory.getInventory', item_id: item_id },
         dataType: 'json',
         success: function(res) {
             if (res.response_code === 0) {
@@ -180,11 +194,12 @@ function editItem(item_id) {
                 $('#item_operation').val('edit');
                 $('#item_id').val(d.item_id);
                 $('#item_name').val(d.item_name);
-                $('#category_id').val(d.category_id);
-                $('#condition').val(d.condition);
-                $('#color').val(d.color);
+                $('#item_cat_id').val(d.item_cat_id);
+                $('#item_cond').val(d.item_cond);
+                $('#color').val(d.item_color);
                 $('#quantity').val(d.quantity);
-                $('#status').val(d.status);
+                $('#allocation_status').val(d.allocation_status);
+                $('#usage_status').val(d.usage_status);
                 $('#purchase_date').val(d.purchase_date);
                 $('#warranty').val(d.warranty);
                 $('#location').val(d.location);

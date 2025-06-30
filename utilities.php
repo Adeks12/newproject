@@ -60,6 +60,12 @@ $data = [$params];
 
 //////////////////////////////
 /// callling the method of  the class
+if ($operation[0] === 'allocation') {
+    $foo = new allocation();
+    echo call_user_func_array(array($foo, trim($operation[1])), $data);
+    exit;
+}
+
 $foo = new $operation[0];
 echo call_user_func_array(array($foo, trim($operation[1])), $data);
 //}else

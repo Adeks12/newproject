@@ -1,140 +1,101 @@
-<div class="card">
-        <div class="card-header">
-            <h5 class="card-title">Inventory Management</h5>
-            <h6 class="card-subtitle text-muted">This report contains all inventory items in the system.</h6>
-        </div>
+<?php
+@session_start();
+require_once('libs/dbfunctions.php');
+$dbobject = new dbobject();
+$merchant_id = $_SESSION['merchant_id'] ?? '';
+
+// Fetch inventory items with category
+$items = $dbobject->db_query("SELECT i.*, ic.item_cat_name FROM inventory i LEFT JOIN item_category ic ON i.item_cat_id = ic.item_cat_id WHERE i.merchant_id='$merchant_id' AND i.delete_status != '1'", true);
+// Fetch allocations (active)
+$allocs = $dbobject->db_query("SELECT item_id, SUM(quantity) as allocated_qty FROM item_allocation WHERE merchant_id='$merchant_id' AND status='active' GROUP BY item_id", true);
+$alloc_map = [];
+foreach($allocs as $a) $alloc_map[$a['item_id']] = (int)$a['allocated_qty'];
+// Category stats
+$cat_stats = [];
+foreach($items as $item) {
+    $cat = $item['item_cat_name'];
+    if(!isset($cat_stats[$cat])) $cat_stats[$cat] = ['total'=>0,'allocated'=>0,'available'=>0];
+    $cat_stats[$cat]['total'] += (int)$item['quantity'];
+    $cat_stats[$cat]['allocated'] += $alloc_map[$item['item_id']] ?? 0;
+    $cat_stats[$cat]['available'] += ((int)$item['quantity'] - ($alloc_map[$item['item_id']] ?? 0));
+}
+?>
+<div class="container mt-4">
+    <h2>Inventory Management</h2>
+    <div class="card mb-4">
         <div class="card-body">
-            <a class="btn btn-outline-primary mb-3" onclick="loadModal('setup/inventory_setup.php','modal_div')"
-                href="javascript:void(0)" data-toggle="modal" data-target="#defaultModalPrimary">
-                 Create Inventory Item
-            </a>
-
-            <a class="btn btn-outline-primary mb-3" onclick="loadModal('setup/maintenance_setup.php','modal_div')"
-                href="javascript:void(0)" data-toggle="modal" data-target="#defaultModalPrimary">
-                Input maintenance log
-            </a>
-
-            <div class="row">
-
-                <div class="col-sm-12 table-responsive">
-
-                            <table id="datatable" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Item Code</th>
-                                        <th>Condition</th>
-                                        <th>Color</th>
-                                        <th>Category</th>
-                                        <th>Allocation Status</th>
-                                        <th>Usage Status</th>
-                                        <th>Allocated Officer</th>
-                                        <th>Allocated Date</th>
-                                        <th>Created Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-                </div>
+            <h4>Category Summary</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Total Quantity</th>
+                            <th>Allocated</th>
+                            <th>Available</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($cat_stats as $cat=>$stat): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($cat); ?></td>
+                            <td><?php echo $stat['total']; ?></td>
+                            <td><?php echo $stat['allocated']; ?></td>
+                            <td><?php echo $stat['available']; ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
-     
-   
-
-
-<script>
-    $(document).ready(function () {
-        $('#datatable').DataTable({
-            responsive: false,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: 'utilities.php',
-                type: 'POST',
-                data: {
-                    op: 'inventory.inventoryList'
-                }
-            },
-            columns: [
-                { data: 0, name: 'id' },
-                { data: 1, name: 'item_code' },
-                { data: 2, name: 'condition' },
-                { data: 3, name: 'color' },
-                { data: 4, name: 'category' },
-                { data: 5, name: 'allocation_status' },
-                { data: 6, name: 'usage_status' },
-                { data: 7, name: 'allocated_officer' },
-                { data: 8, name: 'allocated_date' },
-                { data: 9, name: 'created_at' },
-                { data: 10, name: 'actions', orderable: false }
-            ],
-            oLanguage: {
-                sEmptyTable: "No record was found, please try another query",
-                sProcessing: "Loading inventory..."
-            }
-        });
-    });
-
-    function editInventory(id) {
-        loadModal('setup/inventory_setup.php?op=edit&item_id=' + id, 'modal_div');
-    }
-    
-
-    function deleteInventory(id) {
-        if (confirm("Are you sure you want to delete this inventory item?")) {
-            $.post('utilities.php', { op: 'inventory.deleteInventory', item_id: id }, function (resp) {
-                if (resp.response_code == 0) {
-                    alert(resp.response_message);
-                    $('#datatable').DataTable().ajax.reload();
-                } else {
-                    alert(resp.response_message);
-                }
-            }, 'json');
-        }
-    }
-
-    function allocateInventory(id) {
-        loadModal('setup/inventory_setup.php?op=allocate&item_id=' + id, 'modal_div');
-    }
-    
-
-    function loadModal(url, target) {
-        $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
-        $.get(url, function(data) {
-            $("#" + target).html(data);
-            $('#defaultModalPrimary').modal('show');
-        });
-    }
-    
-
-    function viewAllocationHistory(item_id) {
-    $("#modal_div").html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
-    $.get('utilities.php', { op: 'inventory.getAllocationHistory', item_id: item_id }, function(data) {
-    $("#modal_div").html(data);
-    $('#defaultModalPrimary').modal('show');
-    });
-    }
-
-    function viewMaintenanceLog(item_id) {
-    $("#modal_div").html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
-    $.get('utilities.php', { op: 'inventory.getMaintenanceLog', item_id: item_id }, function(data) {
-    $("#modal_div").html(data);
-    $('#defaultModalPrimary').modal('show');
-    });
-    }
-
-   
-</script>
-
-<!-- Modal Structure -->
-<div class="modal fade" id="defaultModalPrimary" tabindex="-1" role="dialog" aria-labelledby="defaultModalPrimaryLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" id="modal_div">
-      <!-- Content loaded dynamically -->
+        </div>
     </div>
-  </div>
+    <div class="card">
+        <div class="card-body">
+            <h4>Inventory Items</h4>
+            <div class="table-responsive">
+                <table class="table table-striped" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Total Quantity</th>
+                            <th>Allocated</th>
+                            <th>Available</th>
+                            <th>Condition</th>
+                            <th>Color</th>
+                            <th>Location</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($items as $item):
+                            $allocated = $alloc_map[$item['item_id']] ?? 0;
+                            $available = (int)$item['quantity'] - $allocated;
+                        ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($item['item_name']); ?></td>
+                            <td><?php echo htmlspecialchars($item['item_cat_name']); ?></td>
+                            <td><?php echo (int)$item['quantity']; ?></td>
+                            <td><?php echo $allocated; ?></td>
+                            <td><?php echo $available; ?></td>
+                            <td><?php echo htmlspecialchars($item['item_cond']); ?></td>
+                            <td><?php echo htmlspecialchars($item['item_color']); ?></td>
+                            <td><?php echo htmlspecialchars($item['location']); ?></td>
+                            <td><?php echo date('Y-m-d', strtotime($item['created_at'])); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary mt-3" onclick="exportInventory()">Export CSV</button>
+        </div>
+    </div>
 </div>
+<script>
+$(document).ready(function(){
+    $('#inventoryTable').DataTable();
+});
+function exportInventory() {
+    window.location = 'export_inventory.php';
+}
+</script>

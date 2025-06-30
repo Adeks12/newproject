@@ -1,1 +1,1 @@
-UPDATE inventory SET allocation_status='not_allocated',allocated_officer='',allocated_date='',usage_status='Active' WHERE  item_id='1' 
+UPDATE inventory SET usage_status='Maintenance' WHERE  item_id='1' 

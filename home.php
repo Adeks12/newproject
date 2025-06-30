@@ -42,11 +42,11 @@ if ($merchant_id) {
     $active_dept_count = isset($result[0]['cnt']) ? $result[0]['cnt'] : 0;
 }
 
-// Get total number of employed staffs (staff_status = '1')
-$staff_count = 0;
-$sql_staff = "SELECT COUNT(*) as cnt FROM staff WHERE merchant_id='$merchant_id' AND staff_status='1'";
-$result_staff = $dbobject->db_query($sql_staff, true);
-$staff_count = isset($result_staff[0]['cnt']) ? $result_staff[0]['cnt'] : 0;
+// // Get total number of employed staffs (staff_status = '1')
+// $staff_count = 0;
+// $sql_staff = "SELECT COUNT(*) as cnt FROM staff WHERE merchant_id='$merchant_id' AND staff_status='1'";
+// $result_staff = $dbobject->db_query($sql_staff, true);
+// $staff_count = isset($result_staff[0]['cnt']) ? $result_staff[0]['cnt'] : 0;
 
 // Add this before your HTML output to get total new inventory count
 $total_new_inventory = 0;
@@ -57,45 +57,45 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
 
 
 <!doctype html>
-<html lang="en" >
+<html lang="en">
 
-    <head>
-        <meta charset="utf-8" />
-        <title>Dashboard | Qovex - Admin & Dashboard Template</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-        <meta content="Themesbrand" name="author" />
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard | Qovex - Admin & Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-        
+
     <!-- DataTables -->
-        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" /> 
+    <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
 
     <!-- Responsive datatable examples -->
     <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
 
-        <!-- jquery.vectormap css -->
-        <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet"
-            type="text/css" />
+    <!-- jquery.vectormap css -->
+    <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet"
+        type="text/css" />
 
-        <!-- Bootstrap Css -->
-        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
-        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <!-- App Css-->
-        <link href="assets/css/app.min.css"  id="app-style"  rel="stylesheet" type="text/css" />
+    <!-- Bootstrap Css -->
+    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
-    </head>
+</head>
 
-    <body data-layout="detached" data-topbar="colored">
+<body data-layout="detached" data-topbar="colored">
 
 
 
-        <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
 
     <div class="container-fluid">
         <!-- Begin page -->
@@ -106,40 +106,48 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                     <div class="container-fluid">
                         <div class="float-end">
 
-                          
-                          
+
+
 
                             <div class="dropdown d-none d-lg-inline-block ms-1">
-                                <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+                                <button type="button" class="btn header-item noti-icon waves-effect"
+                                    data-toggle="fullscreen">
                                     <i class="mdi mdi-fullscreen"></i>
                                 </button>
                             </div>
 
                             <div class="dropdown d-inline-block">
-                               
-                               
+
+
                             </div>
 
                             <div class="dropdown d-inline-block">
-                                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-2.jpg"
-                                        alt="Header Avatar">
-                                    <span class="d-none d-xl-inline-block ms-1"><?php echo $merchant_first_name ?></span>
+                                <button type="button" class="btn header-item waves-effect"
+                                    id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <img class="rounded-circle header-profile-user"
+                                        src="assets/images/users/avatar-2.jpg" alt="Header Avatar">
+                                    <span
+                                        class="d-none d-xl-inline-block ms-1"><?php echo $merchant_first_name ?></span>
                                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <!-- item-->
-                                    <a class="dropdown-item" href="javascript:getpage('profile.php','page')"><i class="bx bx-user font-size-16 align-middle me-1"></i>
+                                    <a class="dropdown-item" href="javascript:getpage('profile.php','page')"><i
+                                            class="bx bx-user font-size-16 align-middle me-1"></i>
                                         Profile</a>
-                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="logout.php"  onclick="event.preventDefault();confirmLogout();"><i
-                                            class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> Logout</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="logout.php"
+                                        onclick="event.preventDefault();confirmLogout();"><i
+                                            class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+                                        Logout</a>
                                 </div>
                             </div>
 
                             <div class="dropdown d-inline-block">
-                                <button  type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect"
+                                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                                    aria-controls="offcanvasExample">
                                     <i class="mdi mdi-settings-outline"></i>
                                 </button>
                             </div>
@@ -167,7 +175,8 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                                 </a>
                             </div>
 
-                            <button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect"
+                            <button type="button"
+                                class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect"
                                 id="vertical-menu-btn">
                                 <i class="fa fa-fw fa-bars"></i>
                             </button>
@@ -180,88 +189,101 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                                 </div>
                             </form> -->
 
-                         </div>
+                        </div>
 
                     </div>
                 </div>
             </header> <!-- ========== Left Sidebar Start ========== -->
-<div class="vertical-menu">
+            <div class="vertical-menu">
 
-    <div class="h-100">
+                <div class="h-100">
 
-        <div class="user-wid text-center py-4">
-            <div class="user-img">
-                <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
-            </div>
+                    <div class="user-wid text-center py-4">
+                        <div class="user-img">
+                            <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
+                        </div>
 
-            <div class="mt-3">
+                        <div class="mt-3">
 
-                <a href="#" class="text-body fw-medium font-size-16"><?php echo $merchant_first_name?></a>
-                <p class="text-muted mt-1 mb-0 font-size-13"><?php echo $merchant_email ?></p>
+                            <a href="#" class="text-body fw-medium font-size-16"><?php echo $merchant_first_name?></a>
+                            <p class="text-muted mt-1 mb-0 font-size-13"><?php echo $merchant_email ?></p>
 
-            </div>
-        </div>
+                        </div>
+                    </div>
 
-        <!--- Sidemenu -->
-        <div id="sidebar-menu">
-            <!-- Left Menu Start -->
-            <ul class="metismenu list-unstyled" id="side-menu">
-                <li class="menu-title">Menu</li>
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title">Menu</li>
 
-                <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'home.php') ? 'active' : '';?>">
-                    <a href="home.php" class="waves-effect">
-                        <i class="mdi mdi-airplay"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    
-                </li>
+                            <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'home.php') ? 'active' : '';?>">
+                                <a href="home.php" class="waves-effect">
+                                    <i class="mdi mdi-airplay"></i>
+                                    <span>Dashboard</span>
+                                </a>
 
-                <?php
+                            </li>
+
+                            <?php
                 // Enhanced icon mapping with more modern icons
                 $icon_map = [
-                    'dashboard' => 'mdi-view-dashboard',
-                    'users' => 'mdi-account-multiple',
-                    'user' => 'mdi-account',
-                    'customers' => 'mdi-account-group',
-                    'customer' => 'mdi-account-check',
-                    'orders' => 'mdi-cart',
-                    'order' => 'mdi-cart-outline',
-                    'products' => 'mdi-package-variant',
-                    'product' => 'mdi-cube-outline',
-                    'reports' => 'mdi-chart-bar',
-                    'report' => 'mdi-chart-pie',
-                    'settings' => 'mdi-cog',
-                    'profile' => 'mdi-account-circle',
-                    'finance' => 'mdi-credit-card',
-                    'wallet' => 'mdi-wallet',
-                    'transactions' => 'mdi-swap-horizontal',
-                    'transaction' => 'mdi-arrow-left-right',
-                    'messages' => 'mdi-message',
-                    'support' => 'mdi-lifebuoy',
-                    'analytics' => 'mdi-chart-line',
-                    'calendar' => 'mdi-calendar',
-                    'notifications' => 'mdi-bell',
-                    'files' => 'mdi-file-document',
-                    'file manager' => 'mdi-folder',
-                    'department' => 'mdi-office-building',
-                    'items category' => 'mdi-layers',
-                    'staff' => 'mdi-account-plus',
-                    'inventory' => 'mdi-archive',
-                    'tasks' => 'mdi-checkbox-marked-outline',
-                    'task' => 'mdi-clipboard-check',
-                    'projects' => 'mdi-briefcase',
-                    'project' => 'mdi-folder-outline',
-                    'invoice' => 'mdi-receipt',
-                    'pricing' => 'mdi-tag',
-                    'email' => 'mdi-email',
-                    'chat' => 'mdi-chat',
-                    'apps' => 'mdi-apps',
-                    'tools' => 'mdi-wrench',
-                    'components' => 'mdi-layers',
-                    'pages' => 'mdi-file-document-multiple',
-                    'auth' => 'mdi-shield-account',
-                    'logout' => 'mdi-logout',
-                    'default' => 'mdi-layers'
+                // Dashboard & Overview
+                'dashboard' => 'mdi-view-dashboard',
+                'overview' => 'mdi-view-dashboard-outline',
+                'total items' => 'mdi-format-list-bulleted',
+                'allocated' => 'mdi-checkbox-marked-circle-outline',
+                'available' => 'mdi-checkbox-blank-circle-outline',
+                'quick charts' => 'mdi-chart-donut',
+                'recent stock movement' => 'mdi-chart-line',
+
+                // Company Management
+                'company management' => 'mdi-domain',
+                'profile' => 'mdi-account-circle',
+                'settings' => 'mdi-cog',
+
+                // Staff & Accounts
+                'staff & accounts' => 'mdi-account-group',
+                'manage staff' => 'mdi-account-plus',
+                'manage sub-accounts' => 'mdi-account-multiple',
+                'manage departments' => 'mdi-office-building',
+
+                // Inventory
+                'inventory' => 'mdi-archive',
+                'item categories' => 'mdi-layers',
+                'all items' => 'mdi-cube-outline',
+                'restock' => 'mdi-truck-delivery',
+                'restock / replenishment' => 'mdi-truck-delivery',
+                'damaged / disposed items' => 'mdi-delete-forever',
+
+                // Allocation
+                'allocation' => 'mdi-swap-horizontal',
+                'allocate items' => 'mdi-arrow-right-bold-box',
+                'view allocations' => 'mdi-eye',
+                'return items' => 'mdi-undo',
+
+                // Reports
+                'reports' => 'mdi-chart-bar',
+                'allocation reports' => 'mdi-file-chart',
+                'stock movement logs' => 'mdi-history',
+                'staff usage reports' => 'mdi-account-clock',
+                'export csv/pdf' => 'mdi-file-export',
+
+                // Audit Logs
+                'audit logs' => 'mdi-file-document',
+                'all user actions' => 'mdi-account-search',
+                'inventory logs' => 'mdi-clipboard-list',
+
+                // Settings
+                'roles & permissions' => 'mdi-account-key',
+                'change password' => 'mdi-lock-reset',
+                'system preferences' => 'mdi-tune',
+
+                // Logout
+                'logout' => 'mdi-logout',
+
+                // Default fallback
+                'default' => 'mdi-layers'
                 ];
 
                 function get_icon($name, $icon_map) {
@@ -270,9 +292,9 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
                 }
                 ?>
 
-<ul class="metismenu list-unstyled" id="side-menu">
-    <li class="menu-title">Menu</li>
-    <?php
+                            <ul class="metismenu list-unstyled" id="side-menu">
+                                <li class="menu-title">Menu</li>
+                                <?php
     $current_page = basename($_SERVER['PHP_SELF']);
     foreach ($menu_list as $value):
         $menu_name = $value['menu_name'] ?? '';
@@ -281,340 +303,56 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
         $is_active = ($current_page == $menu_url) ? 'active' : '';
     ?>
     <?php if (empty($value['has_sub_menu'])): ?>
-    <li class="<?php echo $is_active; ?>">
-        <a href="javascript:getpage('<?php echo $menu_url; ?>','page')" class="waves-effect">
-            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
-            <span><?php echo ucfirst($menu_name); ?></span>
-        </a>
-    </li>
+        <li class="<?php echo $is_active; ?>">
+            <a href="javascript:getpage('<?php echo $menu_url; ?>','page')" class="waves-effect">
+                <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
+                <span><?php echo ucfirst($menu_name); ?></span>
+            </a>
+        </li>
     <?php else: ?>
-    <?php
-            // Check if any sub-menu is active
-            $sub_active = '';
-            foreach ($value['sub_menu'] as $sub) {
-                if ($current_page == ($sub['menu_url'] ?? '')) {
-                    $sub_active = 'active';
-                    break;
-                }
+        <?php
+        $sub_active = '';
+        foreach ($value['sub_menu'] as $sub) {
+            if ($current_page == ($sub['menu_url'] ?? '')) {
+                $sub_active = 'active';
+                break;
             }
-            ?>
-    <li class="<?php echo $sub_active; ?>">
-        <a href="javascript:void(0);" class="has-arrow waves-effect">
-            <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
-            <span><?php echo ucfirst($menu_name); ?></span>
-        </a>
-        <ul class="sub-menu" aria-expanded="false">
-            <?php foreach ($value['sub_menu'] as $sub): 
-                        $sub_menu_name = $sub['name'] ?? '';
-                        $sub_icon = get_icon($sub_menu_name, $icon_map);
-                        $sub_url = $sub['menu_url'] ?? '#';
-                        $is_sub_active = ($current_page == $sub_url) ? 'active' : '';
-                    ?>
-            <li class="<?php echo $is_sub_active; ?>">
-                <a href="javascript:getpage('<?php echo $sub_url; ?>','page')">
-                    <i class="mdi <?php echo htmlspecialchars($sub_icon); ?>"></i>
-                    <?php echo ucfirst($sub_menu_name); ?>
-                </a>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-    </li>
+        }
+        ?>
+        <li class="<?php echo $sub_active; ?>">
+            <a href="javascript:void(0);" class="has-arrow waves-effect">
+                <i class="mdi <?php echo htmlspecialchars($icon); ?>"></i>
+                <span><?php echo ucfirst($menu_name); ?></span>
+            </a>
+            <ul class="sub-menu" aria-expanded="false">
+                <?php foreach ($value['sub_menu'] as $sub):
+                    $sub_menu_name = $sub['name'] ?? '';
+                    $sub_icon = get_icon($sub_menu_name, $icon_map);
+                    $sub_url = $sub['menu_url'] ?? '#';
+                    $is_sub_active = ($current_page == $sub_url) ? 'active' : '';
+                ?>
+                <li class="<?php echo $is_sub_active; ?>">
+                    <a href="javascript:getpage('<?php echo $sub_url; ?>','page')">
+                        <i class="mdi <?php echo htmlspecialchars($sub_icon); ?>"></i>
+                        <?php echo ucfirst($sub_menu_name); ?>
+                    </a>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </li>
     <?php endif; ?>
     <?php endforeach; ?>
 </ul>
-        </div>
-        <!-- Sidebar -->
-    </div>
-</div>
-<!-- Left Sidebar End -->
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
 
             <!-- ============================================================== -->
             <!-- Start right Content here -->
             <!-- ============================================================== -->
-            <div class="main-content">
-
-                <div class="page-content" >
-
-                    <!-- start page title -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 class="page-title mb-0 font-size-18">Dashboard</h4>
-
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item active">Welcome to Qovex Dashboard</li>
-                                    </ol>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end page title -->
-                    <?php if ($registration_complete != 1) {
-                include('complete_onboarding.php');
-            } else { ?>
-                              
-            <div id="page">
-                <div class="row">
-                    <div class="col-xl-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="avatar-sm font-size-20 me-3">
-                                        <span class="avatar-title bg-soft-primary text-primary rounded">
-                                            <i class="mdi mdi-office-building"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="font-size-16 mt-2">Active Departments</div>
-                                    </div>
-                                </div>
-                                <h4 class="mt-4"><?php echo $active_dept_count; ?></h4>
-                                <div class="row">
-                                    <div class="col-7">
-                                        <p class="mb-0"><span class="text-success me-2">
-                                                <?php echo $active_dept_count > 0 ? '100%' : '0%'; ?>
-                                                <i class="mdi mdi-arrow-up"></i> </span></p>
-                                    </div>
-                                    <div class="col-5 align-self-center">
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
-                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="avatar-sm font-size-20 me-3">
-                                        <span class="avatar-title bg-soft-primary text-primary rounded">
-                                            <i class="mdi mdi-account-multiple-outline"></i>
-                                        </span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="font-size-16 mt-2">Employed Staff</div>
-                                    </div>
-                                </div>
-                                <h4 class="mt-4"><?php echo $staff_count; ?></h4>
-                                <div class="row">
-                                    <div class="col-7">
-                                        <p class="mb-0"><span class="text-success me-2">
-                                                <?php echo $staff_count > 0 ? '100%' : '0%'; ?>
-                                                <i class="mdi mdi-arrow-up"></i> </span></p>
-                                    </div>
-                                    <div class="col-5 align-self-center">
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-9">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-5">Statistics Overview</h4>
-                                <div class="row align-items-center">
-                                    <div class="col-sm-6">
-                                        <div id="donut-chart" class="apex-charts"></div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="py-3">
-                                                        <p class="mb-1 text-truncate"><i
-                                                                class="mdi mdi-circle text-primary me-1"></i> Active
-                                                            Departments</p>
-                                                        <h5><?php echo $active_dept_count; ?></h5>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="py-3">
-                                                        <p class="mb-1 text-truncate"><i
-                                                                class="mdi mdi-circle text-success me-1"></i> Employed
-                                                            Staff</p>
-                                                        <h5><?php echo $staff_count; ?></h5>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="py-3">
-                                                        <p class="mb-1 text-truncate"><i
-                                                                class="mdi mdi-circle text-warning me-1"></i> New
-                                                            Inventory</p>
-                                                        <h5><?php echo $total_new_inventory; ?></h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Chat Card and Mini Inventory Table -->
-                <div class="row">
-                    <div class="col-xl-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Staff Chat</h4>
-                                <ul class="inbox-wid list-unstyled">
-                                    <?php
-                        $staffs = $dbobject->db_query("SELECT staff_first_name, staff_last_name FROM staff WHERE merchant_id='$merchant_id' AND staff_status='1' LIMIT 4", true);
-                        foreach ($staffs as $staff) {
-                            echo '<li class="inbox-list-item">
-                                <a href="#">
-                                    <div class="d-flex align-items-start">
-                                        <div class="me-3 align-self-center">
-                                            <img src="assets/images/users/avatar-3.jpg" alt="" class="avatar-sm rounded-circle">
-                                        </div>
-                                        <div class="flex-1 overflow-hidden">
-                                            <h5 class="font-size-16 mb-1">'.htmlspecialchars($staff['staff_first_name']).'</h5>
-                                            <p class="text-truncate mb-0">Staff member</p>
-                                        </div>
-                                        <div class="font-size-12 ms-auto"></div>
-                                    </div>
-                                </a>
-                            </li>';
-                        }
-                        ?>
-                                </ul>
-                                <div class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm">Load more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Mini Inventory Table</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-centered">
-                                        <thead>
-                                            <tr>
-                                                <th>Item Code</th>
-                                                <th>Condition</th>
-                                                <th>Category</th>
-                                                <th>Status</th>
-                                                <th>Created</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                $inv = $dbobject->db_query("SELECT item_code, item_cond, item_cat_id, allocation_status, created_at FROM inventory WHERE merchant_id='$merchant_id' AND delete_status != '1' ORDER BY created_at DESC LIMIT 5", true);
-                                foreach ($inv as $item) {
-                                    echo '<tr>
-                                        <td>' . htmlspecialchars($item['item_code']) . '</td>
-                                        <td>' . htmlspecialchars($item['item_cond']) . '</td>
-                                        <td>' . htmlspecialchars($item['item_cat_id']) . '</td>
-                                        <td>' . htmlspecialchars($item['allocation_status']) . '</td>
-                                        <td>' . date('Y-m-d', strtotime($item['created_at'])) . '</td>
-                                    </tr>';
-                                }
-                                ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                </div>
-                <!-- End Page-content -->
-
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Qovex.
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-end d-none d-sm-block">
-                                    Design & Develop by Themesbrand
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
-            <!-- end main content-->
-
-        </div>
-        </div>
-        <!-- END layout-wrapper -->
-
-    </div>
-    <!-- end container-fluid -->
-
-    <!-- Right Sidebar -->
-
-    <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-body rightbar">
-            <div class="right-bar">
-                <div data-simplebar class="h-100">
-                    <div class="rightbar-title px-3 py-4">
-                        <a href="javascript:void(0);" class="right-bar-toggle float-end" data-bs-dismiss="offcanvas" aria-label="Close" >
-                            <i class="mdi mdi-close noti-icon"></i>
-                        </a>
-                        <h5 class="m-0">Settings</h5>
-                    </div>
-        
-                    <!-- Settings -->
-                    <hr class="mt-0" />
-                    <h6 class="text-center mb-0">Choose Layouts</h6>
-        
-                    <div class="p-4">
-                        <div class="mb-2">
-                            <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="">
-                        </div>
-        
-                        <div class="form-check form-switch mb-3">
-                            <input type="checkbox" class="form-check-input theme-choice" id="light-mode-switch" checked />
-                            <label class="form-check-label" for="light-mode-switch">Light Mode</label>
-                        </div>
-        
-                        <div class="mb-2">
-                            <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="">
-                        </div>
-        
-                        <div class="form-check form-switch mb-3">
-                            <input type="checkbox" class="form-check-input theme-choice" id="dark-mode-switch"  />
-                            <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                        </div>
-        
-                        <div class="mb-2">
-                            <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="">
-                        </div>
-                        <div class="form-check form-switch mb-5">
-                            <input type="checkbox" class="form-check-input theme-choice" id="rtl-mode-switch" data-appStyle="assets/css/app-rtl.min.css" />
-                            <label class="form-check-label" for="rtl-mode-switch">RTL Mode</label>
-                        </div>
-        
-                    </div>
-        
-                </div>
-                <!-- end slimscroll-menu-->
-            </div>
-        </div>
-   
-    </div>
-
-<?php } ?>
-    <!-- /Right-bar -->
-
-    <!-- Right bar overlay-->
-    <div class="rightbar-overlay"></div>
+          
 
     <!-- JAVASCRIPT -->
     <!-- JAVASCRIPT -->
@@ -627,10 +365,10 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <script src="assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
     <script src="js/sweet_alerts.js"></script>
 
-        
+
     <!-- Required datatable js -->
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script> 
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <!-- Buttons examples -->
     <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
@@ -644,7 +382,7 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
-   
+
 
 
     <!-- apexcharts -->
@@ -658,108 +396,124 @@ $total_new_inventory = isset($result_inventory[0]['cnt']) ? $result_inventory[0]
     <script src="assets/js/app.js"></script>
 
     <script>
-         function confirmLogout() {
-        if (typeof Swal === 'undefined') {
-            if (confirm('Are you sure you want to sign out?')) {
+        function confirmLogout() {
+            if (typeof Swal === 'undefined') {
+                if (confirm('Are you sure you want to sign out?')) {
+                    window.location.href = 'logout.php';
+                }
+                return;
+            }
+            Swal.fire({
+                title: 'Sign Out?',
+                text: 'Are you sure you want to sign out of your account?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, Sign Out',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    popup: 'logout-confirmation'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Signing Out...',
+                        text: 'Please wait while we sign you out.',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    setTimeout(() => {
+                        window.location.href = 'logout.php';
+                    }, 1000);
+                }
+            }).catch(() => {
                 window.location.href = 'logout.php';
-            }
-            return;
+            });
         }
-        Swal.fire({
-            title: 'Sign Out?',
-            text: 'Are you sure you want to sign out of your account?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Yes, Sign Out',
-            cancelButtonText: 'Cancel',
-            customClass: { popup: 'logout-confirmation' }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Signing Out...',
-                    text: 'Please wait while we sign you out.',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => { Swal.showLoading(); }
-                });
-                setTimeout(() => { window.location.href = 'logout.php'; }, 1000);
-            }
-        }).catch(() => {
-            window.location.href = 'logout.php';
-        });
-    }
-    window.confirmLogout = confirmLogout;
+        window.confirmLogout = confirmLogout;
 
 
-     // If you use getpage() or loadNavPage(), call setActiveMenuByUrl(url) after loading
-     function getpage(url, target) {
-     $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
-     $.get(url, function(data) {
-     $("#" + target).html(data);
-     setActiveMenuByUrl(url);
-     });
-     }
-    
-     function loadNavPage(url, target, menu_id) {
-     $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
-     $.get(url, function(data) {
-     $("#" + target).html(data);
-     setActiveMenuByUrl(url);
-     });
-     }
+        // If you use getpage() or loadNavPage(), call setActiveMenuByUrl(url) after loading
+        function getpage(url, target) {
+            $("#" + target).html(
+                '<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
+            $.get(url, function (data) {
+                $("#" + target).html(data);
+                setActiveMenuByUrl(url);
+            });
+        }
 
-     function loadModal(url, target) {
-    $("#" + target).html('<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
-    $.get(url, function(data) {
-        $("#" + target).html(data);
-        $('#defaultModalPrimary').modal('show');
-    });
-}
+        function loadNavPage(url, target, menu_id) {
+            $("#" + target).html(
+                '<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
+            $.get(url, function (data) {
+                $("#" + target).html(data);
+                setActiveMenuByUrl(url);
+            });
+        }
+
+        function loadModal(url, target) {
+            $("#" + target).html(
+                '<div class="text-center p-5"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading...</div>');
+            $.get(url, function (data) {
+                $("#" + target).html(data);
+                $('#defaultModalPrimary').modal('show');
+            });
+        }
+
         function get_icon($name, $icon_map) {
-        $key = is_string($name) ? strtolower(trim($name)) : '';
-        return $icon_map[$key] ?? $icon_map['default'];
+            $key = is_string($name) ? strtolower(trim($name)) : '';
+            return $icon_map[$key] ?? $icon_map['default'];
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-        if (typeof ApexCharts !== "undefined") {
-        var options = {
-        chart: {
-        type: 'donut',
-        height: 240
-        },
-        // Remove or comment out the labels line
-        labels: ['Active Departments', 'Employed Staff', 'New Inventory'],
-        series: [
-        <?php echo $active_dept_count; ?>,
-        <?php echo $staff_count; ?>,
-        <?php echo $total_new_inventory; ?>
-        ],
-        colors: ['#007bff', '#34c38f',  '#ffc107'], // green, blue, yellow
-        legend: { show: false },
-        dataLabels: { enabled: true },
-        tooltip: { enabled: true }
-        };
+            if (typeof ApexCharts !== "undefined") {
+                var options = {
+                    chart: {
+                        type: 'donut',
+                        height: 240
+                    },
+                    // Remove or comment out the labels line
+                    labels: ['Active Departments', 'Employed Staff', 'New Inventory'],
+                    series: [ 
+                        <?php echo $active_dept_count; ?> , 
+                        <?php echo $staff_count; ?> , <?php echo $total_new_inventory; ?>
+                    ],
+                    colors: ['#007bff', '#34c38f', '#ffc107'], // green, blue, yellow
+                    legend: {
+                        show: false
+                    },
+                    dataLabels: {
+                        enabled: true
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                };
 
-        var chart = new ApexCharts(document.querySelector("#donut-chart"), options);
-        chart.render();
-        }
+                var chart = new ApexCharts(document.querySelector("#donut-chart"), options);
+                chart.render();
+            }
         });
     </script>
 
-    <div class="modal fade" id="defaultModalPrimary" tabindex="-1" role="dialog" aria-labelledby="defaultModalPrimaryLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="modal_div">
-                   
-        
-                   </div>
-                </div>
+    <div class="modal fade" id="defaultModalPrimary" tabindex="-1" role="dialog"
+        aria-labelledby="defaultModalPrimaryLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="modal_div">
+
+
             </div>
         </div>
-    </div> <!--end modal-->
+    </div>
+    </div>
+    </div>
+    <!--end modal-->
 
-    </body>
+</body>
 
 </html>
-
