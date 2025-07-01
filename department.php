@@ -29,7 +29,12 @@
         <div class="card-body">
             <a class="btn btn-outline-primary mb-3" onclick="loadModal('setup/department_setup.php','modal_div')"
                 href="javascript:void(0)" data-toggle="modal" data-target="#defaultModalPrimary">
-                <i class="fas fa-plus"></i> Create Department
+                 Create Department
+            </a>
+
+            <a class="btn btn-outline-primary mb-3" onclick="loadModal('setup/departmentHead_setup.php','modal_div')"
+                href="javascript:void(0)" data-toggle="modal" data-target="#defaultModalPrimary">
+                 Setup Department Head
             </a>
 
             <div class="row">

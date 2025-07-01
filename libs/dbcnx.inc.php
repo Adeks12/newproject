@@ -5,7 +5,7 @@ class dbcnx
 	public $host  = "localhost";
      public $user  = "root";
      public $pass  = "";
-     public $db    = "inventory_db1";
+     public $db    = "inventory1_db";
     
 //    public $host  = "localhost";
 //     public $user  = "vuvaaShopAdmin";

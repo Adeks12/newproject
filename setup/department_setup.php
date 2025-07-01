@@ -8,10 +8,11 @@ $doquery= $dbobject->db_query($sql, true);
 $merchant_id = $doquery[0]['merchant_id'];
 
 
-$sql1 = ("SELECT staff_id, staff_first_name, staff_last_name FROM staff WHERE merchant_id='$merchant_id' AND
-depmt_head=1");
-$doquery1 = $dbobject->db_query($sql1, true);
-$heads = $doquery1;
+
+// $sql1 = ("SELECT username, first_name, last_name FROM userdata WHERE merchant_id='$merchant_id' AND
+// depmt_head=1");
+// $doquery1 = $dbobject->db_query($sql1, true);
+// $heads = $doquery1;
 
 if(isset($_REQUEST['op']) && $_REQUEST['op'] == 'edit')
 {
@@ -87,38 +88,26 @@ else
             <div class="col-sm-6">
                 <div class="form-group">
                     <label for="depmt_name">Department Name <span class="asterik">*</span></label>
-                    <input type="text" class="form-control" id="depmt_name" name="depmt_name" required value="<?php echo isset($dept['depmt_name']) ? $dept['depmt_name'] : ''; ?>">
+                    <input type="text" class="form-control" id="depmt_name" name="depmt_name" required
+                        value="<?php echo isset($dept['depmt_name']) ? $dept['depmt_name'] : ''; ?>" placeholder="Enter Department Name">
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label for="depmt_head">Department Head <span class="asterik">*</span></label>
-                    <select class="form-control" id="depmt_head" name="depmt_head">
-                        <option value="">--Select Department Head--</option>
-                        <?php
-                        if ($heads) {
-                            foreach ($heads as $head) {
-                                $selected = (isset($dept['depmt_head']) && $dept['depmt_head'] == $head['staff_id']) ? 'selected' : '';
-                                echo "<option value='{$head['staff_id']}' $selected>{$head['staff_first_name']} {$head['staff_last_name']}</option>";
-                            }
-                        }
-                        ?>
-                    </select>
+            
+            
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label">Department Code</label>
+                        <input type="text" name="depmt_code" class="form-control"
+                            value="<?php echo ($operation == "edit" && $dept && isset($dept['depmt_code'])) ? htmlspecialchars($dept['depmt_code']) : ""; ?>"
+                            placeholder="Enter Department Code">
+                        <small class="asterik">Department code will be generate automatically if this field is empty</small>
+                    </div>
                 </div>
-            </div>
+            
         </div>
-
         <?php if($operation == "edit"): ?>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="form-label">Department Code</label>
-                    <input type="text" name="depmt_code" class="form-control"
-                        value="<?php echo ($dept && isset($dept['depmt_code'])) ? htmlspecialchars($dept['depmt_code']) : ""; ?>"
-                        placeholder="Auto-generated" readonly>
-                    <small class="text-muted">Department code is auto-generated and cannot be changed</small>
-                </div>
-            </div>
+            <div class="row">
+        
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="form-label" style="display:block !important">Department Status<span
