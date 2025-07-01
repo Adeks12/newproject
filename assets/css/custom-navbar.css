@@ -1,0 +1,32 @@
+/* Modern gradient background and SVG shapes for navbar-header */
+.custom-navbar-header {
+    background: linear-gradient(90deg, #6a82fb 0%, #ae72f1 100%);
+    border-radius: 0 0 1.5rem 1.5rem;
+    box-shadow: 0 4px 24px rgba(106,130,251,0.08);
+    position: relative;
+    overflow: hidden;
+}
+.navbar-bg-shape-1 {
+    position: absolute;
+    top: -30px;
+    left: -60px;
+    z-index: 0;
+}
+.navbar-bg-shape-2 {
+    position: absolute;
+    bottom: -10px;
+    right: -40px;
+    z-index: 0;
+}
+.custom-navbar-header .container-fluid,
+.custom-navbar-header .d-flex {
+    position: relative;
+    z-index: 1;
+}
+.custom-navbar-header .logo-lg img,
+.custom-navbar-header .logo-sm img {
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
+}
+.custom-navbar-header .btn {
+    border-radius: 50px;
+}

@@ -19,6 +19,7 @@ class Menu extends dbobject
         {
             foreach($result as $row)
             {
+                $sub_menu = array(); // <-- Move this here!
                 $menu_id    = $row["menu_id"];
                 $parent_id  = $row["parent_id"];
                 $menu_level = $row["menu_level"];
@@ -41,7 +42,7 @@ class Menu extends dbobject
                             'menu_id'    => $menu_id_1,
                             'menu_url'   => $menu_url_1,
                             'name'       => $name
-                            );
+                        );
                     }
                 }
                 
@@ -55,7 +56,6 @@ class Menu extends dbobject
                                 'has_sub_menu' => $has_sub_menu,
                                 'sub_menu'     => $sub_menu
                             );
-                $sub_menu = array();
             }
         }
         return array('response_code'=>0,'data'=>$output);
